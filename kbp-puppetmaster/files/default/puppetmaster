@@ -1,0 +1,29 @@
+# Defaults for puppetmaster - sourced by /etc/init.d/puppet
+
+# Start puppet on boot?
+START=yes
+
+# Startup options
+DAEMON_OPTS=""
+
+# What server type to run 
+# Options: 
+# 	   webrick (default, cannot handle more than ~30 nodes)
+#	   mongrel (scales better than webrick because you can run
+#	    	    multiple processes if you are getting
+#	    	    connection-reset or End-of-file errors, switch to
+#	    	    mongrel. Requires front-end web-proxy such as
+#	    	    apache, nginx, or pound)
+#	   See: http://reductivelabs.com/trac/puppet/wiki/UsingMongrel
+SERVERTYPE=mongrel
+
+# How many puppetmaster instances to start? Its pointless to set this
+# higher than 1 if you are not using mongrel. 
+PUPPETMASTERS=2
+
+# What port should the puppetmaster listen on (default: 18140). If 
+# PUPPETMASTERS is set to a number greater than 1, then the port
+# for the first puppetmaster will be set to the below port, and further
+# instances will be incremented by one
+
+PORT=18140
