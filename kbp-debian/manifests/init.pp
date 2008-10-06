@@ -1,4 +1,4 @@
-class kbp-debian {
+class kbp-debian inherits kbp-base {
         include apt
 
         $aptproxy = "http://apt-proxy:9999"
