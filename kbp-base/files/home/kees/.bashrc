@@ -24,6 +24,7 @@ fi
 # prompt below)
 if [ -z "$dcenv" ] && [ -r /etc/dcenv ]; then
     read dcenv < /etc/dcenv
+    dcenv=".$dcenv"
 fi
 
 # set a fancy prompt (non-color, unless we know we "want" color)
