@@ -26,7 +26,7 @@ class kbp-base {
                 }
 
                 file { "/home/$username/.ssh":
-                        source => "puppet://puppet/kbp-debian/home/$username/.ssh",
+                        source => "puppet://puppet/kbp-base/home/$username/.ssh",
                         mode => 700,
                         owner => "$username",
                         group => "kumina",
@@ -34,7 +34,7 @@ class kbp-base {
                 }
 
                 file { "/home/$username/.ssh/authorized_keys":
-                        source => "puppet://puppet/kbp-debian/home/$username/.ssh/authorized_keys",
+                        source => "puppet://puppet/kbp-base/home/$username/.ssh/authorized_keys",
                         mode => 644,
                         owner => "$username",
                         group => "kumina",
@@ -42,7 +42,7 @@ class kbp-base {
                 }
 
                 file { "/home/$username/.bashrc":
-                        source => "puppet://puppet/kbp-debian/home/$username/.bashrc",
+                        source => "puppet://puppet/kbp-base/home/$username/.bashrc",
                         mode => 644,
                         owner => "$username",
                         group => "kumina",
@@ -50,7 +50,7 @@ class kbp-base {
                 }
 
                 file { "/home/$username/.bash_profile":
-                        source => "puppet://puppet/kbp-debian/home/$username/.bash_profile",
+                        source => "puppet://puppet/kbp-base/home/$username/.bash_profile",
                         mode => 644,
                         owner => "$username",
                         group => "kumina",
@@ -58,7 +58,7 @@ class kbp-base {
                 }
 
                 file { "/home/$username/.bash_aliases":
-                        source => "puppet://puppet/kbp-debian/home/$username/.bash_aliases",
+                        source => "puppet://puppet/kbp-base/home/$username/.bash_aliases",
                         mode => 644,
                         owner => "$username",
                         group => "kumina",
