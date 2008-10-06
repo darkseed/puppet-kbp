@@ -42,12 +42,6 @@ class kbp-debian inherits kbp-base {
                 require => Package["openssh-server"],
         }
 
-        @@sshkey { $fqdn:
-                alias => ["$hostname.$localdistpath", $ipaddress],
-                type => "ssh-rsa",
-                key => $sshrsakey
-        }
-
         # We want to use pinfo as infobrowser, so when the symlink is not
         # pointing towards pinfo, we need to run update-alternatives
         check_alternatives { "infobrowser":
