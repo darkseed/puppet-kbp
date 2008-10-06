@@ -37,7 +37,7 @@ class kbp-puppetmaster {
 	apt::source { "etch-backports":
 		comment => "Repository for packages which have been backported to Etch.",
 		sourcetype => "deb",
-		uri => "http://apt-proxy:9999/etch-backports/",
+		uri => "http://apt-proxy:9999/backports/",
 		distribution => "etch-backports",
 		components => "main",
 		require => Apt::Key["16BA136C"];
