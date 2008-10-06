@@ -18,7 +18,7 @@ class kbp-puppetmaster {
 	}
 
 	file { "/etc/default/puppetmaster":
-		source => "puppet://puppet/puppetmaster/default/puppetmaster",
+		source => "puppet://puppet/kbp-puppetmaster/default/puppetmaster",
 		owner => "root",
 		group => "root",
 		mode => 644,
@@ -26,7 +26,7 @@ class kbp-puppetmaster {
 	}
 
 	nginx::site_config { "puppet.$domain":
-		source => "puppet://puppet/puppetmaster/nginx/sites-available/puppet.$domain",
+		source => "puppet://puppet/kbp-puppetmaster/nginx/sites-available/puppet.$domain",
 	}
 
 	nginx::site { "puppet.$domain":
