@@ -1,7 +1,4 @@
 class kbp-base {
-	include env-$customer
-	include env-$datacenter
-
         define staff_user($fullname, $uid) {
                 $username = $name
 
