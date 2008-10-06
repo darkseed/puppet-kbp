@@ -15,4 +15,4 @@ Defaults	env_reset
 
 # User privilege specification
 root	ALL=(ALL) ALL
-%root	ALL=(ALL) PASSWD:ALL
+%root	ALL=(ALL) PASSWD: ALL

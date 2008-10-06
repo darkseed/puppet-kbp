@@ -14,21 +14,3 @@ fi
 if [ -d ~/bin ] ; then
     PATH=~/bin:"${PATH}"
 fi
-
-# Ruby gems
-if [ -d ~/.rubygems ]; then
-    GEM_HOME=~/.rubygems
-    export GEM_HOME
-
-    if [ -d ~/.rubygems/bin ] ; then
-        PATH=~/.rubygems/bin:"${PATH}"
-    fi
-fi
-
-if [ -d ~/.rubylibs/bin ] ; then
-    RUBYLIB=~/.rubylibs
-    export RUBYLIB
-fi
-if [ -d ~/.rubylibs/bin ] ; then
-    PATH=~/.rubylibs/bin:"${PATH}"
-fi

@@ -15,33 +15,35 @@ shopt -s checkwinsize
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
 
-# set variable identifying the datacenter we're in (used in the prompt below)
-if [ -z "$kumina_datacenter" ] && [ -r /etc/kumina_datacenter ]; then
-    kumina_datacenter=.$(cat /etc/kumina_datacenter)
-fi
-
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
+# set variable identifying the datacenter environment we're in (used in the
+# prompt below)
+if [ -z "$dcenv" ] && [ -r /etc/dcenv ]; then
+    read dcenv < /etc/dcenv
+    dcenv=".$dcenv"
+fi
+
 # set a fancy prompt (non-color, unless we know we "want" color)
 #case "$TERM" in
 #xterm-color)
-#    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h$kumina_datacenter\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+#    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h$dcenv\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 #    ;;
 #*)
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h$kumina_datacenter:\w\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h$dcenv\w\$ '
 #    ;;
 #esac
 
 # Comment in the above and uncomment this below for a color prompt
-#PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+#PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h$dcenv\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
 xterm*|rxvt*)
-    PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}${kumina_datacenter}: ${PWD/$HOME/~}\007"'
+    PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}$dcenv: ${PWD/$HOME/~}\007"'
     ;;
 *)
     ;;
