@@ -1,0 +1,82 @@
+#!/usr/bin/env perl
+#
+# rsnapshot maakt de backups met de volgende directorystructuur aan:
+#
+#   .
+#   |-- daily.0
+#   |   `-- localhost
+#   |       |-- data
+#   |       |-- etc
+#   |       |-- home
+#   |       |-- root
+#   |       |-- usr
+#   |       `-- var
+#   |-- daily.1
+#       `-- localhost
+#           |-- data
+#           |-- etc
+#           |-- home
+#           |-- root
+#           |-- usr
+#           `-- var
+#
+# Dit script maakt symlinks aan in $targetdir, op de volgende manier:
+#
+#   .
+#   |-- 2005-09-26 -> /backup/daily.1/localhost/subdir
+#   `-- 2005-09-27 -> /backup/daily.0/localhost/subdir
+#
+# Dat zorgt ervoor dat gebruikers makkelijker de juiste directory kunnen vinden
+# voor het terugzetten van een backup.
+
+use strict;
+use POSIX;
+use Getopt::Long;
+
+sub print_usage {
+	print <<EOF
+Usage: $0 -b backupdir -s subdir -t targetdir
+	Options:
+	-b backupdir  The directory which contains the backups.  Example: /backup
+	-s subdir     A relative path inside backupdir for which symlinks should be made.  Example: localhost/data/
+	-t targetdir  The directory in which the symlinks should be created.  Example: /exported/backup
+EOF
+}
+
+my ($backupdir, $subdir, $targetdir);
+
+GetOptions(
+	"b=s" => \$backupdir,
+	"s=s" => \$subdir,
+	"t=s" => \$targetdir,
+);
+
+unless (defined($backupdir) &&
+        defined($subdir) &&
+        defined($targetdir)) {
+	&print_usage();
+	exit 1;
+}
+
+# Verwijder de oude symlinks.
+opendir(DIR, "$targetdir") || die "Could not open $targetdir for reading ($!)";
+
+while (my $item = readdir(DIR)) {
+	if (-l "$targetdir/$item") {
+		unlink("$targetdir/$item") || die "Could not remove $targetdir/$item ($!)";
+	}
+}
+
+# Maak de nieuwe symlinks aan.
+opendir(DIR, "$backupdir") || die "Could not open $backupdir for reading ($!)";
+
+while (my $snapshot = readdir(DIR)) {
+	next unless ($snapshot =~ /^(hourly|daily|weekly|monthly)\.[0-9]+$/);
+	next unless (-d "$backupdir/$snapshot");
+
+	my $change_time = (stat("$backupdir/$snapshot"))[9];
+	my $date = strftime("%F", localtime($change_time));
+
+	symlink("$backupdir/$snapshot/$subdir", "$targetdir/$date") ||
+	    die "Could not symlink $backupdir/$snapshot to $targetdir/$date ($!)";
+}
