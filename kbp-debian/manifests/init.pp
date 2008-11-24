@@ -144,6 +144,7 @@ class kbp-debian inherits kbp-base {
                 }
         }
 
+	# Kumina repository key
         apt::key { "498B91E6":
                 ensure => present,
         }
