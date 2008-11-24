@@ -1,5 +1,6 @@
 class kbp-dell::poweredge {
 	include ipmi
+	include munin::client
 
 	define line($file, $line, $ensure = 'present') {
 		case $ensure {
