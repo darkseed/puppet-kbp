@@ -114,34 +114,32 @@ class kbp-debian inherits kbp-base {
                 require => Package["cron-apt"],
         }
 
-        if $lsbdistcodename {
-                apt::source {
-                        "${lsbdistcodename}-base":
-                                comment => "The main repository for the installed Debian release: $lsbdistdescription.",
-                                sourcetype => "deb",
-                                uri => "$aptproxy/debian/",
-                                distribution => "${lsbdistcodename}",
-                                components => "main";
-                        "${lsbdistcodename}-security":
-                                comment => "Security updates for $lsbdistcodename.",
-                                sourcetype => "deb",
-                                uri => "$aptproxy/security/",
-                                distribution => "${lsbdistcodename}/updates",
-                                components => "main";
-                        "${lsbdistcodename}-volatile":
-                                comment => "Repository for volatile packages in $lsbdistcodename, such as SpamAssassin and Clamav",
-                                sourcetype => "deb",
-                                uri => "$aptproxy/debian-volatile/",
-                                distribution => "${lsbdistcodename}/volatile",
-                                components => "main";
-                        "kumina":
-                                comment => "Local repository, for packages maintained by Kumina.",
-                                sourcetype => "deb",
-                                uri => "$aptproxy/kumina/",
-                                distribution => "${lsbdistcodename}-kumina",
-                                components => "main",
-                                require => Apt::Key["498B91E6"];
-                }
+	apt::source {
+		"${lsbdistcodename}-base":
+			comment => "The main repository for the installed Debian release: $lsbdistdescription.",
+			sourcetype => "deb",
+			uri => "$aptproxy/debian/",
+			distribution => "${lsbdistcodename}",
+			components => "main";
+		"${lsbdistcodename}-security":
+			comment => "Security updates for $lsbdistcodename.",
+			sourcetype => "deb",
+			uri => "$aptproxy/security/",
+			distribution => "${lsbdistcodename}/updates",
+			components => "main";
+		"${lsbdistcodename}-volatile":
+			comment => "Repository for volatile packages in $lsbdistcodename, such as SpamAssassin and Clamav",
+			sourcetype => "deb",
+			uri => "$aptproxy/debian-volatile/",
+			distribution => "${lsbdistcodename}/volatile",
+			components => "main";
+		"kumina":
+			comment => "Local repository, for packages maintained by Kumina.",
+			sourcetype => "deb",
+			uri => "$aptproxy/kumina/",
+			distribution => "${lsbdistcodename}-kumina",
+			components => "main",
+			require => Apt::Key["498B91E6"];
         }
 
 	# Kumina repository key
