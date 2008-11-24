@@ -47,7 +47,7 @@ class kbp-dell::poweredge {
 	}
 }
 
-class kbp-dell:::pe1955 inherits kbp-dell:::poweredge {
+class kbp-dell::pe1955 inherits kbp-dell::poweredge {
 	# RAID controller utility
 	package { "mpt-status":
 		ensure => installed,
@@ -64,8 +64,8 @@ class kbp-dell:::pe1955 inherits kbp-dell:::poweredge {
 	}
 }
 
-class kbp-dell:::pe1950 inherits kbp-dell:::poweredge {
-	include kbp-dell:::perc
+class kbp-dell::pe1950 inherits kbp-dell::poweredge {
+	include kbp-dell::perc
 
 	file { "/etc/munin/plugins/ipmi_sensor_u_rpm":
 		ensure => symlink,
@@ -77,8 +77,8 @@ class kbp-dell:::pe1950 inherits kbp-dell:::poweredge {
 	}
 }
 
-class kbp-dell:::pe2950 inherits kbp-dell:::pe1950 {
-	include kbp-dell:::perc
+class kbp-dell::pe2950 inherits kbp-dell::pe1950 {
+	include kbp-dell::perc
 
 	file { "/etc/munin/plugins/ipmi_sensor_u_rpm":
 		ensure => symlink,
@@ -90,7 +90,7 @@ class kbp-dell:::pe2950 inherits kbp-dell:::pe1950 {
 	}
 }
 
-class kbp-dell:::perc {
+class kbp-dell::perc {
 	package { "megacli":
 		ensure => installed,
 	}
