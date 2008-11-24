@@ -1,4 +1,6 @@
 class kbp-puppetmaster {
+	include munin::client
+
         package { ["puppetmaster", "mongrel", "rails"]:
                 ensure => present,
         }
