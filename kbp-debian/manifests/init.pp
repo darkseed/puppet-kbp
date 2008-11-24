@@ -1,5 +1,26 @@
+class kbp-debian::etch {
+}
+
+class kbp-debian::lenny {
+	# Don't pull in Recommends or Suggests dependencies when installing
+	# packages with apt.
+	file {
+		"/etc/apt/apt.conf.d/no-recommends":
+			content => "APT::Install-Recommends \"false\";\n",
+			owner => "root",
+			group => "root",
+			mode => 644;
+		"/etc/apt/apt.conf.d/no-suggests":
+			content => "APT::Install-Suggests \"false\";\n",
+			owner => "root",
+			group => "root",
+			mode => 644;
+	}
+}
+
 class kbp-debian inherits kbp-base {
         include apt
+	include "kbp-debian::$lsbdistcodename"
 
         $aptproxy = "http://apt-proxy:9999"
 
