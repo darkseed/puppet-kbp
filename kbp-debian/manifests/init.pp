@@ -64,6 +64,12 @@ class kbp-debian inherits kbp-base {
                 require => Package["tzdata"],
         }
 
+        file { "/etc/localtime":
+                ensure => link,
+		target => "/usr/share/zoneinfo/Europe/Amsterdam",
+                require => Package["tzdata"],
+        }
+
         # Ensure /tmp always has the correct permissions. (It's a common
         # mistake to forget to do a chmod 1777 /tmp when /tmp is moved to its
         # own filesystem.)
