@@ -39,7 +39,7 @@ class kbp-base {
                 }
 
                 file { "/home/$username/.bashrc":
-                        source => "puppet://puppet/kbp-base/home/$username/.bashrc",
+                        content => template("kbp-base/home/$username/.bashrc"),
                         mode => 644,
                         owner => "$username",
                         group => "kumina",
