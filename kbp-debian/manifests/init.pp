@@ -51,6 +51,19 @@ class kbp-debian inherits kbp-base {
                 ensure => absent
         }
 
+        # Local timezone
+        package { "tzdata":
+                ensure => installed,
+        }
+
+        file { "/etc/timezone":
+                owner => "root",
+                group => "root",
+                mode => 644,
+                content => "Europe/Amsterdam\n",
+                require => Package["tzdata"],
+        }
+
         # Ensure /tmp always has the correct permissions. (It's a common
         # mistake to forget to do a chmod 1777 /tmp when /tmp is moved to its
         # own filesystem.)
