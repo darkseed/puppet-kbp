@@ -1,0 +1,37 @@
+use strict;
+
+#
+# Place your configuration directives here.  They will override those in
+# earlier files.
+#
+# See /usr/share/doc/amavisd-new/ for documentation and examples of
+# the directives you can use in this file
+#
+
+$final_virus_destiny      = D_DISCARD;  # (defaults to D_DISCARD)
+$final_banned_destiny     = D_BOUNCE;  # (defaults to D_BOUNCE)
+$final_spam_destiny       = D_DISCARD;  # (defaults to D_BOUNCE)
+$final_bad_header_destiny = D_PASS;  # (defaults to D_PASS), D_BOUNCE suggested
+
+$sa_tag_level_deflt = 0.0;
+$QUARANTINEDIR = "";
+$virus_admin = undef;
+
+$banned_filename_re = undef;
+
+@bypass_virus_checks_maps = (
+   \%bypass_virus_checks, \@bypass_virus_checks_acl, \$bypass_virus_checks_re);
+
+@bypass_spam_checks_maps = (
+   \%bypass_spam_checks, \@bypass_spam_checks_acl, \$bypass_spam_checks_re);
+
+$remove_existing_x_scanned_headers = 1;
+$remove_existing_spam_headers  = 1;
+
+# The maximum number of messages an amavisd child will scan before being
+# replaced with a new child.
+$max_requests = 20;
+$max_servers = 5;
+
+#------------ Do not modify anything below this line -------------
+1;  # ensure a defined return
