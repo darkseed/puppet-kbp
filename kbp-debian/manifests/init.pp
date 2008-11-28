@@ -41,12 +41,12 @@ class kbp-debian inherits kbp-base {
         }
 
         # Packages we do not need, thank you very much!
-        $unwantedpackages = ["pidentd", "cyrus-sasl2-doc", "dhcp3-client",
-          "dhcp3-common", "dictionaries-common", "doc-linux-text",
-          "doc-debian", "finger", "iamerican", "ibritish", "ispell",
-          "laptop-detect", "libident", "mpack", "mtools", "popularity-contest",
-          "procmail", "tcsh", "w3m", "wamerican", "ppp", "pppoe", "pppoeconf",
-          "at", "mdetect", "tasksel"]
+        $unwantedpackages = ["pidentd", "dhcp3-client", "dhcp3-common",
+          "dictionaries-common", "doc-linux-text", "doc-debian", "finger",
+           "iamerican", "ibritish", "ispell", "laptop-detect", "libident",
+           "mpack", "mtools", "popularity-contest", "procmail", "tcsh",
+           "w3m", "wamerican", "ppp", "pppoe", "pppoeconf", "at", "mdetect",
+           "tasksel"]
         package { $unwantedpackages:
                 ensure => absent
         }
