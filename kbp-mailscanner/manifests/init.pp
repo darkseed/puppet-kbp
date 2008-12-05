@@ -8,6 +8,13 @@ class kbp-mailscanner inherits amavisd-new {
 }
 
 class kbp-mailscanner::spamchecker inherits spamassassin {
+	file { "/etc/spamassassin/local.cf":
+		source => "puppet://puppet/kbp-mailscanner/spamassassin/local.cf",
+		owner => "root",
+		group => "root",
+		mode => 644,
+		notify => Service["amavis"],
+	}
 }
 
 class kbp-mailscanner::virusscanner inherits clamav {
