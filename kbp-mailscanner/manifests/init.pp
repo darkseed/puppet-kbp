@@ -2,8 +2,12 @@ class kbp-mailscanner inherits amavisd-new {
 	include kbp-mailscanner::spamchecker
 	include kbp-mailscanner::virusscanner
 
-	File["/etc/amavis/conf.d/50-user"] {
-		source => "puppet://puppet/kbp-mailscanner/amavis/conf.d/50-user",
+	file {"/etc/amavis/conf.d/40-kbp":
+		owner => "root",
+		group => "root",
+		mode => 644,
+		source => "puppet://puppet/kbp-mailscanner/amavis/conf.d/40-kbp",
+		notify => Service["amavis"],
 	}
 }
 
