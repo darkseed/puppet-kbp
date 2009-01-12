@@ -10,6 +10,11 @@ class kbp-mailscanner inherits amavisd-new {
 		source => "puppet://puppet/kbp-mailscanner/amavis/conf.d/40-kbp",
 		notify => Service["amavis"],
 	}
+
+	package { ["zoo", "arj", "cabextract"]:
+		ensure => installed,
+		notify => Service["amavis"],
+	}
 }
 
 class kbp-mailscanner::spamchecker inherits spamassassin {
