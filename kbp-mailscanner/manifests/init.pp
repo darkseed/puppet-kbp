@@ -1,4 +1,5 @@
 class kbp-mailscanner inherits amavisd-new {
+	include munin::client
 	include kbp-mailscanner::spamchecker
 	include kbp-mailscanner::virusscanner
 
