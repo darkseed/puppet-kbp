@@ -25,6 +25,14 @@ class kbp-mailscanner::spamchecker inherits spamassassin {
 		mode => 644,
 		notify => Service["amavis"],
 	}
+
+	# Pyzor and Razor work similarly (they both use checksums for detecting
+	# spam), but the details differ.
+	# http://spamassassinbook.packtpub.com/chapter11.htm has a good
+	# description on the differences.
+	package { ["pyzor", "razor"]:
+		ensure => installed,
+	}
 }
 
 class kbp-mailscanner::virusscanner inherits clamav {
