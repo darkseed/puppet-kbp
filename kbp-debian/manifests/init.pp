@@ -166,6 +166,12 @@ class kbp-debian inherits kbp-base {
                 ensure => present,
         }
 
+	# Package which makes sure the installed Kumina repository key is
+	# up-to-date.
+	package { "kumina-archive-keyring":
+		ensure => installed,
+	}
+
         file { "/etc/apt/preferences":
                 content => template("kbp-debian/apt/preferences"),
                 owner => "root",
