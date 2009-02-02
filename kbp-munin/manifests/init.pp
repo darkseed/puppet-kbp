@@ -1,8 +1,6 @@
-class kbp-munin::client {
-	include munin::client
+class kbp-munin::client inherits munin::client {
 }
 
-class kbp-munin::server {
-	include munin::server
+class kbp-munin::server inherits munin::server {
 	include nagios::nsca
 }
