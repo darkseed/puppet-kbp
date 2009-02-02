@@ -178,4 +178,11 @@ class kbp-debian inherits kbp-base {
                 group => "root",
                 mode => 644;
         }
+
+	file { "/var/lib/puppet":
+		ensure => directory,
+		owner => "puppet",
+		group => "puppet",
+		mode => 751;
+	}
 }
