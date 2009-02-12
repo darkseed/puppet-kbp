@@ -1,0 +1,15 @@
+<Location /<%= name %>/svn>
+	DAV svn
+	SVNPath /srv/svn/<%= name %>
+
+        Order deny,allow
+        Deny from all
+        Allow from 10.72.73.23
+        AuthType Basic
+        AuthName "Trac"
+        AuthBasicProvider "ldap"
+        AuthLDAPURL "ldap://ldap/<%= "dc=" << domain.split(".").join(",dc=") %>?uid?sub?(objectClass=posixAccount)"
+        authzldapauthoritative Off
+        require valid-user
+        satisfy any
+</Location>

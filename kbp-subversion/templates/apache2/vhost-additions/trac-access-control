@@ -1,0 +1,34 @@
+<Location /<%= name %>>
+	Satisfy any
+	Order Allow,Deny
+<%
+   if allow_from then
+     allow_from.to_a.each do |ip|
+-%>
+	Allow from <%= ip %>
+<%
+     end
+   end
+-%>
+	Deny from all
+	AuthType Basic
+<% if authname -%>
+	AuthName "<%= authname %>"
+<% else -%>
+	AuthName "<%= name %>"
+<% end %>
+	AuthUserFile /etc/trac/users/<%= name %>
+	Require valid-user
+<% if additional_vh_options -%>
+<% additional_vh_options.to_a.each do |vh_option| -%>
+	<%= vh_option %>
+<% end -%>
+<% end -%>
+</Location>
+<% if access_from_informa_ips -%>
+
+<LocationMatch (^/<%= name %>/?$|^/<%= name %>/wiki|^/<%= name %>/chrome|^/<%= name %>/attachment|^/<%= name %>/search|^/<%= name %>/register|^/<%= name %>/reset_password)>
+	Order Allow,Deny
+	Include /etc/trac/informa_ips.conf
+</LocationMatch>
+<% end -%>

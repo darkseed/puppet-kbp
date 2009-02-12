@@ -1,0 +1,14 @@
+<Location /<%= name %>/svn>
+	DAV svn
+	SVNPath /srv/svn/<%= name %>
+
+<% if svnauthpath -%>
+	AuthzSVNAccessFile <%= svnauthpath %>
+	Require valid-user
+	AuthType Basic
+<% if authname -%>
+	AuthName <%= authname %>
+<% end -%>
+	AuthUserFile /srv/trac/users/<%= name %>
+<% end -%>
+</Location>
