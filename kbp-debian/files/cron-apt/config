@@ -15,13 +15,6 @@
 # APTCOMMAND=/usr/bin/aptitude
 # APTCOMMAND=/usr/bin/apt-file
 
-# If FILTERCTRLM is "true", then any line containing ^M in the apt-get
-# output will be filtered from log/mail/console output.  This is useful
-# with aptitude, which does not currently support -qq (very quiet).
-# This feature is considered exprimental and will not work with
-# for example MAILON=upgrade.
-# FILTERCTRLM="false"
-
 # A path is needed for this to work. This is the default PATH.
 # export PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
 
@@ -29,6 +22,11 @@
 # accessing the APT sources all at the same time and overwhelming them.
 # Default is 3600 seconds which means one hour.
 # RUNSLEEP=3600
+
+# The minimum amount of disc space (in kB) that need to exist on the
+# device where temporary files are created (mktemp) to allow cron-apt
+# to run. If set to 0 it will always continue even if empty.
+# MINTMPDIRSIZE=10
 
 # The directory where the actions is stored.
 # ACTIONDIR="/etc/cron-apt/action.d"
@@ -131,15 +129,7 @@ MAILON="upgrade"
 #  OPTIONS="-o quiet=1 -o Dir::Etc::SourceList=/etc/apt/security.sources.list"
 # If you want to allow unauthenticated and untrusted packages add the
 # following to your options directive.
-# This will only work with aptitude >= 0.3.5
-# The --assume-yes option will answer yes to almost all questions. This
-# is not very safe, and can fill up your /tmp file system (#316606) due
-# to an aptitude bug (#332885) which shows if --assume-yes is used and
-# untrusted packages would be installed. This aptitude bug is fixed in
-# aptitude 0.3.4.
 #  OPTIONS="-o quiet=1 -o APT::Get::AllowUnauthenticated=true -o aptitude::Cmdline::ignore-trust-violations=yes"
-#
-# Added the following line to see more upgrading details
 OPTIONS="-V"
 
 # additional APT configuration file that is loaded first. This can be set in
