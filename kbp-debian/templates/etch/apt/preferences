@@ -1,0 +1,27 @@
+# We use this instead of APT::Default-Release "version";  because Puppet does
+# not have a fact for the release name (stable/testing/unstable), only for the
+# codenames (etch/lenny/sid).  Apt::Default-Release requires the release name.
+Explanation: Default release
+Package: *
+Pin: release v=<%= lsbdistrelease %>
+Pin-Priority: 990
+
+Explanation: Packages from the Kumina repository get priority over packages from official
+Explanation: Debian repositories.
+Package: *
+Pin: release <%= lsbdistcodename %>-kumina
+Pin-Priority: 999
+
+# Ruby 1.8.5 seems to be leaking memory like a sieve, so get 1.8.7 from
+# etch-backports
+Package: ruby1.8
+Pin: release a=etch-backports
+Pin-Priority: 1001
+
+Package: libruby1.8
+Pin: release a=etch-backports
+Pin-Priority: 1001
+
+Package: libopenssl-ruby1.8
+Pin: release a=etch-backports
+Pin-Priority: 1001

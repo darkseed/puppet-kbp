@@ -1,4 +1,17 @@
 class kbp-debian::etch {
+	# Backports are needed for Ruby 1.8.7.	Ruby 1.8.5 leaks memory.
+	apt::source { "${lsbdistcodename}-backports":
+		comment => "Repository for packages which have been backported to $lsbdistcodename.",
+		sourcetype => "deb",
+		uri => "$aptproxy/backports",
+		distribution => "${lsbdistcodename}-backports",
+		components => "main",
+		require => Apt::Key["16BA136C"],
+	}
+
+	apt::key { "16BA136C":
+		ensure => present,
+	}
 }
 
 class kbp-debian::lenny {
@@ -19,10 +32,10 @@ class kbp-debian::lenny {
 }
 
 class kbp-debian inherits kbp-base {
+        $aptproxy = "http://apt-proxy:9999"
+
         include apt
 	include "kbp-debian::$lsbdistcodename"
-
-        $aptproxy = "http://apt-proxy:9999"
 
         define check_alternatives($linkto) {
                 exec { "/usr/sbin/update-alternatives --set $name $linkto":
@@ -173,7 +186,7 @@ class kbp-debian inherits kbp-base {
 	}
 
         file { "/etc/apt/preferences":
-                content => template("kbp-debian/apt/preferences"),
+                content => template("kbp-debian/${lsbdistcodename}/apt/preferences"),
                 owner => "root",
                 group => "root",
                 mode => 644;
