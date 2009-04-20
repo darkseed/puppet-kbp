@@ -9,7 +9,8 @@
 # of the above conditions can be waived if you get permission from the copyright
 # holder.
 #
-# Tested on Debian GNU/Linux 5.0 (lenny) with "lenny" and "etch" targets.
+# Tested on Debian GNU/Linux 5.0 (lenny) with "lenny" and "etch" targets,
+# and on Debian GNU/Linux 4.0 (etch) with "etch" target.
 #
 # USAGE:
 # $ sudo xen-create-image --dist <dist> --role kumina [regular options]
@@ -158,7 +159,8 @@ DEBIAN_FRONTEND=noninteractive chroot ${prefix} \
 		iputils-arping less lftp lvm2 lsb-base vim ucf \
 		locales lvm2 mailx \
 		mime-support pinfo reportbug screen telnet \
-		lsb-release udev kumina-archive-keyring
+		lsb-release udev kumina-archive-keyring \
+		openssh-server
 
 # Ensure Kumina APT repos is trusted (using package "kumina-archive-keyring").
 chroot ${prefix} apt-get update
