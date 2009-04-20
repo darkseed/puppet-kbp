@@ -1,0 +1,189 @@
+#!/bin/sh
+#
+# Role for xen-tools Debian package. Copyright (c) 2009 by Kumina bv.
+#
+# This work is licensed under the Creative Commons Attribution-Share Alike 3.0
+# Unported license. In short: you are free to share and to make derivatives of
+# this work under the conditions that you appropriately attribute it, and that
+# you only distribute it under the same, similar or a compatible license. Any
+# of the above conditions can be waived if you get permission from the copyright
+# holder.
+#
+# Tested on Debian GNU/Linux 5.0 (lenny) with "lenny" and "etch" targets.
+#
+# USAGE:
+# $ sudo xen-create-image --dist <dist> --role kumina [regular options]
+#
+# It makes sense to also use the kumina.tmpl configuration template. (This role
+# e.g. adds a disk device where the VG's remain.)
+#
+# RESULT:
+# Almost finished KBP domU, ready to "puppetize"... ;-)
+#
+
+# Figure out what disk we're installed on.
+prefix=$1
+disk=$(grep ${prefix} /proc/mounts | cut -d ' ' -f 1)
+
+# Filesystems to use.
+filesystems="tmp home var srv"
+
+# Check for $vgsize and set it if it was not already.
+if [ -z $vgsize ]; then
+	echo "No vgsize set. Defaulting to 5G."
+	vgsize=5G
+else
+	echo "Variable vgsize is set to ${vgsize}."
+fi
+
+if [ -z $domain ]; then
+	domain=$(hostname -d)
+	echo "No domain set. Defaulting to ${domain}."
+else
+	echo "Domain is set to ${domain}."
+fi
+
+#  Source our common functions - this will let us install a Debian package.
+if [ -e /usr/lib/xen-tools/common.sh ]; then
+	. /usr/lib/xen-tools/common.sh
+else
+	echo "Installation problem."
+	exit 1
+fi
+
+echo "Creating LVM volume group within ${lvm}, using size ${vgsize} and name ${hostname}-vg."
+lvcreate ${lvm} -L ${vgsize} -n ${hostname}-vg
+pvcreate /dev/${lvm}/${hostname}-vg
+vgcreate ${hostname}-vg /dev/${lvm}/${hostname}-vg
+vgchange -ay ${hostname}-vg
+
+echo "Creating LVM logical volumes."
+lvcreate -L 512M -n ${hostname}-vg/tmp
+lvcreate -L 1024M -n ${hostname}-vg/home
+lvcreate -L 1024M -n ${hostname}-vg/var
+lvcreate -L 1024M -n ${hostname}-vg/srv
+
+# Give disk a nice label.
+tune2fs -L root ${disk}
+
+echo "Formatting new logical volumes."
+for fs in $filesystems; do
+	mke2fs -O resize_inode -j -L $fs /dev/${hostname}-vg/$fs
+done
+
+echo "Move /var to logical volume."
+mkdir ${prefix}/var.new
+mount /dev/${hostname}-vg/var ${prefix}/var.new
+mv ${prefix}/var/* ${prefix}/var.new
+umount ${prefix}/var.new
+rmdir ${prefix}/var.new
+
+echo "Mounting new filesystem:"
+for fs in $filesystems; do
+	echo "- /$fs"
+	mount /dev/${hostname}-vg/$fs ${prefix}/$fs
+done
+
+echo "Adding mount points to /etc/fstab."
+echo "/dev/${hostname}-vg/tmp /tmp ext3 nodev,nosuid 0 2" >> ${prefix}/etc/fstab
+echo "/dev/${hostname}-vg/home /home ext3 nodev,nosuid,noatime 0 2" >> ${prefix}/etc/fstab
+echo "/dev/${hostname}-vg/var /var ext3 noatime 0 2" >> ${prefix}/etc/fstab
+echo "/dev/${hostname}-vg/srv /srv ext3 noatime 0 2" >> ${prefix}/etc/fstab
+
+echo "Fix APT setup."
+cat<<EOF > ${prefix}/etc/apt/sources.list
+deb http://ftp.nl.debian.org/debian/ ${dist} main
+deb http://security.debian.org/ ${dist}/updates main contrib
+deb http://debian.kumina.nl/debian/ ${dist}-kumina main
+deb http://ftp.nl.debian.org/debian-volatile ${dist}/volatile main
+EOF
+
+# Ensure APT cache buffer is big enough.
+echo "APT::Cache-Limit \"16777216\";" > ${prefix}/etc/apt/apt.conf.d/50cachesize
+
+cat >> ${prefix}/etc/apt/preferences <<EOF
+# Packages from the Kumina repository get priority over packages from official
+# Debian repositories.
+Package: *
+Pin: release o=Kumina
+Pin-Priority: 999
+EOF
+
+# Fix resolv.conf file.
+if grep -q "^domain " ${prefix}/etc/resolv.conf; then
+	sed -i "s/^domain .*/domain $domain/" ${prefix}/etc/resolv.conf
+else
+	echo "domain $domain" >> ${prefix}/etc/resolv.conf
+fi
+
+if ! grep -q "^search .*$domain " ${prefix}/etc/resolv.conf; then
+	sed -i "s/^search \(.*\)/search $domain \1/" ${prefix}/etc/resolv.conf
+fi 
+
+# Make sure no processes start (and sometimes hang...) during domU setup.
+mv "${prefix}/sbin/start-stop-daemon" "${prefix}/sbin/start-stop-daemon.REAL"
+cat > ${prefix}/sbin/start-stop-daemon <<EOF
+#!/bin/sh
+echo
+echo "WARNING: Fake start-stop-daemon called, doing nothing..."
+EOF
+chmod 755 "${prefix}/sbin/start-stop-daemon"
+
+echo "Defaults for /etc/hosts."
+cat > ${prefix}/etc/hosts <<EOF
+127.0.0.1       localhost
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+ff02::3 ip6-allhosts
+EOF
+
+echo "Force initial filesystem check on first boot."
+touch ${prefix}/forcefsck
+
+echo "Install and remove packages."
+chroot ${prefix} apt-get update
+
+# Make sure apt-get doesn't pull in a lot of other packages we don't want.
+echo 'APT::Install-Suggests "false";' >> ${prefix}/etc/apt/apt.conf.d/no-suggests
+echo 'APT::Install-Recommends "false";' >> ${prefix}/etc/apt/apt.conf.d/no-recommends
+
+DEBIAN_FRONTEND=noninteractive chroot ${prefix} \
+	/usr/bin/apt-get --yes --force-yes install \
+		cron-apt nullmailer debsums dlocate elinks file \
+		iputils-arping less lftp lvm2 lsb-base vim ucf \
+		locales lvm2 mailx \
+		mime-support pinfo reportbug screen telnet \
+		lsb-release udev kumina-archive-keyring
+
+# Ensure Kumina APT repos is trusted (using package "kumina-archive-keyring").
+chroot ${prefix} apt-get update
+
+# Delete bogus packages.
+chroot ${prefix} apt-get --purge --yes remove ed laptop-detect nano tasksel tasksel-data at exim4
+
+# Even more cleanup when we're running Lenny.
+[ ${dist} = "lenny" ] && chroot ${prefix} apt-get --yes autoremove
+
+echo "Use preferred editor."
+chroot ${prefix} update-alternatives --set editor /usr/bin/vim.basic
+
+echo "Use preferred infobrowser."
+chroot ${prefix} update-alternatives --set infobrowser /usr/bin/pinfo
+
+mv "${prefix}/sbin/start-stop-daemon.REAL" "${prefix}/sbin/start-stop-daemon"
+
+echo "Ensure correct /tmp permissions."
+chmod 1777 ${prefix}/tmp
+
+echo "Unmount the disks."
+for fs in $filesystems; do
+	umount ${prefix}/$fs
+done
+
+# Disable new VG.
+vgchange -an ${hostname}-vg
