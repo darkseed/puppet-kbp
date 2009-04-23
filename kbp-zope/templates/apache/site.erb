@@ -1,0 +1,37 @@
+<% if ssl -%>
+<VirtualHost <%= address %>:80>
+  ServerAdmin	support@kumina.nl
+  ServerName	<%= domain %>
+  RewriteEngine	on
+  RewriteRule	^(.*)?$ https://<%= domain %>$1 [L,R]
+</VirtualHost>
+<% end
+
+if ssl
+	apache_port = 443
+	apache_protocol = "https"
+else
+	apache_port = 80
+	apache_protocol = "http"
+end
+
+-%>
+<VirtualHost <%= address %>:<%= apache_port %>>
+  ServerAdmin	support@kumina.nl
+  ServerName	<%= domain %>
+<% if serveralias -%>
+  ServerAlias	<%= serveralias.to_a.join(" ") -%>
+<% end -%>
+
+  ErrorLog	/var/log/apache2/<%= domain %>-error.log
+  CustomLog	/var/log/apache2/<%= domain %>-access.log combined
+
+<% if ssl -%>
+  SSLEngine On
+  SSLCertificateFile /etc/apache2/ssl/<%= domain %>.pem
+<% end -%>
+
+  RewriteEngine	On
+  RewriteRule	^/(.*) http://localhost:<%= port %>/VirtualHostBase/<%= apache_protocol %>/<%= domain %>:<%= apache_port %>/<%= path << "/" %>VirtualHostRoot/$1 [L,P]
+  Include	/etc/apache2/vhost-additions/<%= domain %>/
+</VirtualHost>

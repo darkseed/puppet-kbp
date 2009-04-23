@@ -1,9 +1,8 @@
 class kbp-zope inherits zope {
-	include kbp-nginx
-
-	define site($path, $port, $serveralias=false, $template="kbp-zope/nginx/site.erb") {
-		# Set up a virtual host configuration in Nginx which proxies
-		# traffic for Zope.
+	define site($path, $port, $serveralias=false, $template=false, $ssl=false) {
+		# Set up a virtual host configuration in Nginx or Apache
+		# (depending on which is installed), for proxying traffic from
+		# and to Zope.
 		#
 		# Arguments:
 		#
@@ -11,7 +10,9 @@ class kbp-zope inherits zope {
 		#     $port	      Port on which the Zope instance is listening.
 		#     $serveralias    Optional - (Array of) serveralias(es)
 		#     $template       Optional - Template to be used for the virtual host
-		#		      definition in Nginx.  Should contain the proxy settings.
+		#		      definition in Nginx or Apache.  Should contain the
+		#                     proxy settings.
+		#     $ssl            Optional - Enable https for the site?
 		#
 		# Example:
 		#
@@ -21,19 +22,48 @@ class kbp-zope inherits zope {
 		#	    $internal_only => true,
 		#    }
 		#
-		#    Will create a virtual host definition in Nginx for
-		#    http://www.example.org/.  All traffic will be proxied to
-		#    http://localhost:9673/example.
+		#    Will create a virtual host definition in Nginx or Apache
+		#    for http://www.example.org/.  All traffic will be proxied
+		#    to http://localhost:9673/example.
 
 		$server = "localhost"
 		$domain = $name
 
-		nginx::site_config { "$domain":
-			content => template($template),
+		# XXX There must be a way to make this cleaner. E.g.:
+		#
+		# $webserver = "nginx"
+		# $webserver::site_config { $domain:
+		#	template => template("kbp-zope/$webserver/site.erb")
+		# }
+		# $webserver::site { "$domain":
+		#		ensure => present,
+		# }
+		#
+		# But that doesn't work. (It would also require making the
+		# nginx and apache types more alike.)
+
+		if tagged(nginx) {
+			if $template {
+				nginx::site_config { "$domain": content => template($template) }
+			} else {
+				nginx::site_config { "$domain": content => template("kbp-zope/nginx/site.erb") }
+			}
+
+			nginx::site { "$domain":
+				ensure => present,
+			}
 		}
 
-		nginx::site { "$domain":
-			ensure => present,
+		if tagged(apache) {
+			if $template {
+				apache::site_config { "$domain": address => $ipaddress, template => $template }
+			} else {
+				apache::site_config { "$domain": address => $ipaddress, template => "kbp-zope/apache/site.erb" }
+			}
+
+			apache::site { "$domain":
+				ensure => present,
+			}
 		}
 	}
 
@@ -68,6 +98,8 @@ class kbp-zope inherits zope {
 		#    debug mode will be enabled, and it will run with user and
 		#    group "zopedev".
 
+		include zope::server
+
 		zope::server::instance { "$name":
 			port => $port,
 			debugmode => $debugmode,
@@ -79,16 +111,21 @@ class kbp-zope inherits zope {
 		}
 
 		if $domain {
-			$server = "localhost"
-			$path = ""
-			$serveralias = $aliases
-
-			nginx::site_config { "$domain":
-				content => template("kbp-zope/nginx/site.erb"),
+			kbp-zope::site { $domain:
+				port => $port,
+				path => $path,
+				serveralias => $aliases,
 			}
+		}
 
-			nginx::site { "$domain":
-				ensure => present,
+		if tagged(apache) {
+			# Allow Apache to proxy to the Zope instance
+			file { "/etc/apache2/conf.d/zope-$name":
+				owner => "root",
+				group => "root",
+				mode => 644,
+				content => template("kbp-zope/apache/proxy.erb"),
+				require => Apache::Module["proxy_http"],
 			}
 		}
 
@@ -132,7 +169,9 @@ class kbp-zope inherits zope {
 		#    debug mode will be enabled, and it will run with user and
 		#    group "dev".
 
-		instance { "$name":
+		include zope::zeo
+
+		kbp-zope::instance { "$name":
 			port => $port,
 			domain => $domain,
 			aliases => $aliases,
@@ -148,6 +187,16 @@ class kbp-zope inherits zope {
 			socket => "/srv/zope2.9/zeo/$name/var/zeo.sock",
 			user => $user,
 			group => $group,
+		}
+	}
+
+	if tagged(apache) {
+		apache::module {
+			"proxy":
+				ensure => present;
+			"proxy_http":
+				ensure => present,
+				require => Apache::Module["proxy"];
 		}
 	}
 }

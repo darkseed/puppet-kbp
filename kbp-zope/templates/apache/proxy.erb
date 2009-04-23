@@ -1,0 +1,6 @@
+<IfModule mod_proxy.c>
+	<Proxy http://localhost:<%= port %>/>
+		Order deny,allow
+		Allow from all
+	</Proxy>
+</IfModule>
