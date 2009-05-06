@@ -6,7 +6,7 @@ class kbp-php::common inherits php::common {
 		source => "puppet://puppet/php/shared/conf.d/security.ini",
 	}
 
-	package { "php5-apc":
+	package { "php-apc":
 		ensure => installed,
 	}
 
