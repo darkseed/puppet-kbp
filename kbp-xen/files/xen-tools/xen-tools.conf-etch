@@ -170,7 +170,7 @@ initrd = /boot/initrd.img-FIXME
 # The default mirror for debootstrap which can be used to install
 # Debian Sid, Sarge, and Etch.
 #
-mirror = http://apt-proxy/debian/
+mirror = http://apt-proxy:9999/debian/
 
 #
 # A mirror suitable for use when installing the Dapper release of Ubuntu.
