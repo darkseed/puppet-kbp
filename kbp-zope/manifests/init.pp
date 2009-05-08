@@ -99,6 +99,7 @@ class kbp-zope inherits zope {
 		#    group "zopedev".
 
 		include zope::server
+		include munin::client
 
 		zope::server::instance { "$name":
 			port => $port,
@@ -129,17 +130,13 @@ class kbp-zope inherits zope {
 			}
 		}
 
-		file {
-			"/etc/munin/plugins/zope_cache_status_$port":
-				ensure => symlink,
-				target => "/usr/local/share/munin/plugins/zope_cache_status",
-				notify => Service["munin-node"],
-				require => File["/usr/local/share/munin/plugins"];
-			"/etc/munin/plugins/zope_db_activity_$port":
-				ensure => symlink,
-				target => "/usr/local/share/munin/plugins/zope_db_activity",
-				notify => Service["munin-node"],
-				require => File["/usr/local/share/munin/plugins"];
+		munin::client::plugin {
+			"zope_cache_status_$port":
+				script_path => "/usr/local/share/munin/plugins",
+				script => "zope_cache_status";
+			"zope_db_activity_$port":
+				script_path => "/usr/local/share/munin/plugins",
+				script => "zope_db_activity";
 		}
 	}
 

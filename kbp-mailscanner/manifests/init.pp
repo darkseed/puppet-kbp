@@ -16,25 +16,14 @@ class kbp-mailscanner inherits amavisd-new {
 		notify => Service["amavis"],
 	}
 
-	file {
-		"/etc/munin/plugins/amavis_time":
-			ensure => symlink,
-			target => "/usr/local/share/munin/plugins/amavis_",
-			notify => Service["munin-node"];
-		"/etc/munin/plugins/amavis_cache":
-			ensure => symlink,
-			target => "/usr/local/share/munin/plugins/amavis_",
-			notify => Service["munin-node"];
-		"/etc/munin/plugins/amavis_content":
-			ensure => symlink,
-			target => "/usr/local/share/munin/plugins/amavis_",
-			notify => Service["munin-node"];
-		"/etc/munin/plugin-conf.d/amavis_":
-			source => "puppet://puppet/munin/client/plugin-conf.d/amavis_",
-			owner => "root",
-			group => "root",
-			mode => 644,
-			notify => Service["munin-node"];
+	munin::client::plugin { ["amavis_time", "amavis_cache", "amavis_content"]:
+		script => "amavis_",
+		script_path => "/usr/local/share/munin/plugins",
+	}
+
+	munin::client::plugin::config { "amavis_":
+		section => "amavis_*",
+		content => "env.amavis_db_home /var/lib/amavis/db\nuser amavis",
 	}
 }
 

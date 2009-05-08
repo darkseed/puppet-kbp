@@ -1,4 +1,6 @@
 class kbp-php::common inherits php::common {
+	include munin::client
+
 	file { "/etc/php$phpversion/conf.d/security.ini":
 		owner => "root",
 		group => "root",
@@ -10,11 +12,9 @@ class kbp-php::common inherits php::common {
 		ensure => installed,
 	}
 
-        file { "/etc/munin/plugins/apc":
-                ensure => link,
-                target => "/usr/local/share/munin/plugins/apc_",
+        munin::client::plugin { "apc":
+                script_path => "/usr/local/share/munin/plugins/apc_",
                 require => Package["php-apc"],
-                notify => Service["munin-node"],
         }
 }
 

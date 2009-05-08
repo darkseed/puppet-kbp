@@ -51,10 +51,7 @@ class kbp-puppetmaster {
                 }
         }
 
-        file { "/etc/munin/plugins/puppetmasterd_process_memory":
-                ensure => link,
-                target => "/usr/local/share/munin/plugins/puppetmasterd_process_memory",
-                require => File["/usr/local/share/munin/plugins"],
-                notify => Service["munin-node"],
+        munin::client::plugin { "puppetmasterd_process_memory":
+                script_path => "/usr/local/share/munin/plugins",
         }
 }

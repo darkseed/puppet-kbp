@@ -20,26 +20,18 @@ class kbp-dell::poweredge {
 		}
 	}
 
-	# Graph the IPMI sensors for temperature
-	file { 
-		"/etc/munin/plugin-conf.d/ipmi_sensor_":
-			owner => "root",
-			group => "root",
-			mode => 644,
-			source => "puppet://puppet/munin/client/plugin-conf.d/ipmi_sensor_";
-		"/etc/munin/plugins/ipmi_sensor_u_degrees_c":
-			ensure => symlink,
-			owner => "root",
-			group => "root",
-			target => "/usr/local/share/munin/plugins/ipmi_sensor_",
-			require => File["/etc/munin/plugin-conf.d/ipmi_sensor_"],
-			notify => Service["munin-node"];
+	munin::client::plugin {
+		# Graph the IPMI sensors for temperature
+		"ipmi_sensor_u_degrees_c":
+			ensure => present;
+		# SMART is not supported on the Dell drives
+		"hddtemp_smartctl":
+			ensure => absent;
 	}
 
-	# SMART is not supported on the Dell drives
-	file { "/etc/munin/plugins/hddtemp_smartctl":
-		ensure => absent,
-		notify => Service["munin-node"];
+	munin::client::plugin::config { "ipmi_sensor_":
+		section => "ipmi_sensor_*",
+		content => "user root",
 	}
 
 	line { "module-e752x_edac":
@@ -68,26 +60,18 @@ class kbp-dell::pe1955 inherits kbp-dell::poweredge {
 class kbp-dell::pe1950 inherits kbp-dell::poweredge {
 	include kbp-dell::perc
 
-	file { "/etc/munin/plugins/ipmi_sensor_u_rpm":
-		ensure => symlink,
-		owner => "root",
-		group => "root",
-		target => "/usr/local/share/munin/plugins/ipmi_sensor_",
-		require => File["/etc/munin/plugin-conf.d/ipmi_sensor_"],
-		notify => Service["munin-node"];
+	munin::client::plugin { "ipmi_sensor_u_rpm":
+		script_path => "/usr/local/share/munin/plugins",
+		script => "ipmi_sensor_",
 	}
 }
 
 class kbp-dell::pe2950 inherits kbp-dell::poweredge {
 	include kbp-dell::perc
 
-	file { "/etc/munin/plugins/ipmi_sensor_u_rpm":
-		ensure => symlink,
-		owner => "root",
-		group => "root",
-		target => "/usr/local/share/munin/plugins/ipmi_sensor_",
-		require => File["/etc/munin/plugin-conf.d/ipmi_sensor_"],
-		notify => Service["munin-node"];
+	munin::client::plugin { "ipmi_sensor_u_rpm":
+		script_path => "/usr/local/share/munin/plugins",
+		script => "ipmi_sensor_",
 	}
 }
 

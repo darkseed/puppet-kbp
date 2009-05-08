@@ -1,3 +1,0 @@
-[bind9_rndc]
-env.querystats /var/cache/bind/named.stats
-user bind
