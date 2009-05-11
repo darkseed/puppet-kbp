@@ -1,4 +1,7 @@
 class kbp-munin::client inherits munin::client {
+	package { "libnet-snmp-perl":
+		ensure => installed,
+	}
 }
 
 class kbp-munin::server inherits munin::server {
