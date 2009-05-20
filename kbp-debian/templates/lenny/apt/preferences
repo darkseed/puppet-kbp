@@ -1,11 +1,3 @@
-# We use this instead of APT::Default-Release "version";  because Puppet does
-# not have a fact for the release name (stable/testing/unstable), only for the
-# codenames (etch/lenny/sid).  Apt::Default-Release requires the release name.
-Explanation: Default release
-Package: *
-Pin: release v=<%= lsbdistrelease %>
-Pin-Priority: 990
-
 Explanation: Packages from the Kumina repository get priority over packages from official
 Explanation: Debian repositories.
 Package: *
