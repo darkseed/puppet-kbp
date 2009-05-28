@@ -32,6 +32,6 @@ end
 <% end -%>
 
   RewriteEngine	On
-  RewriteRule	^/(.*) http://localhost:<%= port %>/VirtualHostBase/<%= apache_protocol %>/<%= domain %>:<%= apache_port %>/<%= path << "/" %>VirtualHostRoot/$1 [L,P]
+  RewriteRule	^/(.*) http://localhost:<%= port %>/VirtualHostBase/<%= apache_protocol %>/<%= domain %>:<%= apache_port %><%= path << "/" %>VirtualHostRoot/$1 [L,P]
   Include	/etc/apache2/vhost-additions/<%= domain %>/
 </VirtualHost>
