@@ -44,9 +44,15 @@ class kbp-zope inherits zope {
 
 		if tagged(nginx) {
 			if $template {
-				nginx::site_config { "$domain": content => template($template) }
+				nginx::site_config { "$domain":
+					content => template($template),
+					serveralias => $serveralias,
+				 }
 			} else {
-				nginx::site_config { "$domain": content => template("kbp-zope/nginx/site.erb") }
+				nginx::site_config { "$domain":
+					content => template("kbp-zope/nginx/site.erb"),
+					serveralias => $serveralias,
+				}
 			}
 
 			nginx::site { "$domain":
@@ -56,9 +62,17 @@ class kbp-zope inherits zope {
 
 		if tagged(apache) {
 			if $template {
-				apache::site_config { "$domain": address => $ipaddress, template => $template }
+				apache::site_config { "$domain":
+					address => $ipaddress,
+					template => $template,
+					serveralias => $serveralias,
+				 }
 			} else {
-				apache::site_config { "$domain": address => $ipaddress, template => "kbp-zope/apache/site.erb" }
+				apache::site_config { "$domain":
+					address => $ipaddress,
+					template => "kbp-zope/apache/site.erb",
+					serveralias => $serveralias,
+				 }
 			}
 
 			apache::site { "$domain":
