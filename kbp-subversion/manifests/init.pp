@@ -1,6 +1,25 @@
+class kbp-subversion::etch {
+	package { "db4.4-util":
+		ensure => installed,
+	}
+
+	apache::module { "mod_python":
+		ensure => present,
+		require => Package["libapache2-mod-python"];
+	}
+}
+
+class kbp-subversion::lenny {
+	apache::module { "python":
+		ensure => present,
+		require => Package["libapache2-mod-python"];
+	}
+}
+
 class kbp-subversion inherits trac {
 	include subversion
 	include apache
+	include "kbp-subversion::$lsbdistcodename"
 
 	define repo($group, $svn_via_dav=false, $mode="2755") {
 		subversion::repo { $name:
@@ -18,7 +37,7 @@ class kbp-subversion inherits trac {
 		}
 	}
 
-	package { ["subversion-tools", "db4.4-util", "patch"]:
+	package { ["subversion-tools", "patch"]:
 		ensure => installed,
 	}
 
@@ -42,9 +61,6 @@ class kbp-subversion inherits trac {
         }
 
 	apache::module {
-		"mod_python":
-			ensure => present,
-			require => Package["libapache2-mod-python"];
 		"authnz_ldap":
 			ensure => present;
 		"dav_svn":
