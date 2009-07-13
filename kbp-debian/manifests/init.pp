@@ -48,7 +48,7 @@ class kbp-debian inherits kbp-base {
           "file", "debsums", "dlocate", "gnupg", "ucf", "elinks", "reportbug",
           "tree", "netcat", "openssh-client", "tcpdump", "iproute", "acl",
           "psmisc", "udev", "lsof", "bzip2", "strace", "pinfo", "lsb-release",
-          "ethtool", "mailx", "host", "socat"]
+          "ethtool", "mailx", "host", "socat", "make"]
         package { $wantedpackages:
                 ensure => installed
         }
