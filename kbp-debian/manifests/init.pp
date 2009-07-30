@@ -129,9 +129,20 @@ class kbp-debian inherits kbp-base {
                 require => Package["adduser"],
         }
 
-        package { "locales":
-                ensure => installed,
+        package {
+		"locales":
+			require => File["/var/cache/debconf/locales.preseed"],
+			responsefile => "/var/cache/debconf/locales.preseed",
+			ensure => installed;
         }
+
+	file {
+		"/var/cache/debconf/locales.preseed":
+			source => "puppet://puppet/kbp-debian/locales.preseed",
+			owner => "root",
+			group => "root",
+			mode => 644;
+	}
 
         # Mail on upgrades with cron-apt
         package { "cron-apt":
