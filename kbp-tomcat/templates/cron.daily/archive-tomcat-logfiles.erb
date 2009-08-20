@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# Clean up the log files in all Tomcat instances
+for logdir in /srv/tomcat/*/logs; do
+	# Only clean up log files in $logdir if $logdir is a directory
+	[ -d "$logdir" ] || continue
+
+	# remove every file older than <%= remove_after_days %> days
+	find "$logdir" -type f -mtime +<%= remove_after_days %> -print0 | xargs -r -0 rm
+
+	# compress every file older than <%= compress_after_days %>
+	# days, which hasn't been compressed yet
+	find "$logdir" -type f \( -regex '^.*\.log.[0-9]+-[0-9]+-[0-9]+$' \
+		-or -regex '^.*.[0-9]+-[0-9]+-[0-9]+\.log$' \) \
+		-and -not -size 0 \
+		-mtime +<%= compress_after_days %> \
+		-print0 | xargs -r -0 bzip2
+done
