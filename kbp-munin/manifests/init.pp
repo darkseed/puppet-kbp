@@ -38,6 +38,11 @@ class kbp-munin::server inherits munin::server {
 		require => File["/etc/init.d/munin-server"],
 	}
 
+	exec { "/etc/init.d/munin-server start":
+		unless => "/bin/sh -c '[ -d /dev/shm/munin ]'",
+		require => Service["munin-server"];
+	}
+
 	# Cron job which syncs the RRD files to disk every 30 minutes.
 	file { "/etc/cron.d/munin-sync":
 		source => "puppet://puppet/munin/server/cron.d/munin-sync",
