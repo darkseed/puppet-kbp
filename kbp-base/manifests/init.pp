@@ -86,9 +86,6 @@ class kbp-base {
         }
 
         staff_user {
-                "bart":
-                        fullname => "Bart Cortooms",
-                        uid => 1000;
                 "tim":
                         fullname => "Tim Stoop",
                         uid => 1001;
