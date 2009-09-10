@@ -1,5 +1,5 @@
 class kbp-base {
-        define staff_user($fullname, $uid) {
+        define staff_user($fullname, $uid, $password_hash) {
                 $username = $name
 
                 user { "$username":
@@ -12,6 +12,7 @@ class kbp-base {
                         shell => "/bin/bash",
                         home => "/home/$username",
                         require => File["/etc/skel/.bash_profile"],
+			password => $password_hash,
                 }
 
                 file { "/home/$username":
