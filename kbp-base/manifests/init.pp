@@ -95,7 +95,7 @@ class kbp-base {
                         uid => 1002;
 		"mike":
 			fullname => "Mike Huijerjans",
-			uid => 1003;
+			uid => 1000;
         }
 
         package { "sudo":
