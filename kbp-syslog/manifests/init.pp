@@ -37,7 +37,7 @@ class kbp-syslog::server::mysql {
 }
 
 class kbp-syslog::mysql::etch {
-	err { "This is not implemented for Etch or earlier!" }
+	err ("This is not implemented for Etch or earlier!")
 }
 
 class kbp-syslog::mysql::lenny inherits rsyslog::mysql {
