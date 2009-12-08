@@ -29,3 +29,16 @@ class kbp-syslog::server::lenny inherits rsyslog::server {
 
 class kbp-syslog::client::lenny inherits rsyslog::client {
 }
+
+# Additional options
+class kbp-syslog::server::mysql {
+	include kbp-syslog::server
+	include "kbp-syslog::mysql::$lsbdistcodename"
+}
+
+class kbp-syslog::mysql::etch {
+	err { "This is not implemented for Etch or earlier!" }
+}
+
+class kbp-syslog::mysql::lenny inherits rsyslog::mysql {
+}
