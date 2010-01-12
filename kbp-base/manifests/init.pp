@@ -83,19 +83,19 @@ class kbp-base {
         # XXX Needs to do a groupmod when a group with gid already exists.
         group { "kumina":
                 ensure => present,
-                gid => 1000,
+                gid => 10000,
         }
 
         staff_user {
                 "tim":
                         fullname => "Tim Stoop",
-                        uid => 1001;
+                        uid => 10001;
                 "kees":
                         fullname => "Kees Meijs",
-                        uid => 1002;
+                        uid => 10002;
 		"mike":
 			fullname => "Mike Huijerjans",
-			uid => 1000;
+			uid => 10000;
         }
 
         package { "sudo":
