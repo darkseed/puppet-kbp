@@ -3,3 +3,17 @@ Explanation: Debian repositories.
 Package: *
 Pin: release <%= lsbdistcodename %>-kumina
 Pin-Priority: 999
+
+Explanation: The default Lenny libvirt packages are broken.
+Package: libvirt-bin
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
+Package: libvirt-doc
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
+Explanation: The default Lenny netcat-openbsd package lacks features, needed by libvirt.
+Package: netcat-openbsd
+Pin: release a=lenny-backports
+Pin-Priority: 999
