@@ -1,0 +1,9 @@
+<pool type='logical'>
+	<name>guest</name>
+	<source>
+		<name>guest</name>
+	</source>
+	<target>
+		<path>/dev/guest</path>
+	</target>
+</pool>
