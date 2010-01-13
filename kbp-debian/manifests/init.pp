@@ -1,17 +1,4 @@
 class kbp-debian::etch {
-	# Backports are needed for Ruby 1.8.7.	Ruby 1.8.5 leaks memory.
-	apt::source { "${lsbdistcodename}-backports":
-		comment => "Repository for packages which have been backported to $lsbdistcodename.",
-		sourcetype => "deb",
-		uri => "$aptproxy/backports",
-		distribution => "${lsbdistcodename}-backports",
-		components => "main",
-		require => Apt::Key["16BA136C"],
-	}
-
-	apt::key { "16BA136C":
-		ensure => present,
-	}
 }
 
 class kbp-debian::lenny {
@@ -176,6 +163,13 @@ class kbp-debian inherits kbp-base {
 			uri => "$aptproxy/debian-volatile/",
 			distribution => "${lsbdistcodename}/volatile",
 			components => "main";
+		"${lsbdistcodename}-backports":
+			comment => "Repository for packages which have been backported to $lsbdistcodename.",
+			sourcetype => "deb",
+			uri => "$aptproxy/backports",
+			distribution => "${lsbdistcodename}-backports",
+			components => "main",
+			require => Apt::Key["16BA136C"];
 		"kumina":
 			comment => "Local repository, for packages maintained by Kumina.",
 			sourcetype => "deb",
@@ -190,9 +184,20 @@ class kbp-debian inherits kbp-base {
                 ensure => present,
         }
 
+	# Backports.org repository key
+	apt::key { "16BA136C":
+		ensure => present,
+	}
+
 	# Package which makes sure the installed Kumina repository key is
 	# up-to-date.
 	package { "kumina-archive-keyring":
+		ensure => installed,
+	}
+
+	# Package which makes sure the installed Backports.org repository key is
+	# up-to-date.
+	package { "debian-backports-keyring":
 		ensure => installed,
 	}
 
