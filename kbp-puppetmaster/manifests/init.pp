@@ -20,13 +20,38 @@ class kbp-puppetmaster {
 			subscribe => File["/etc/default/puppetmaster"];
         }
 
-        file { "/etc/default/puppetmaster":
-                source => "puppet://puppet/kbp-puppetmaster/default/puppetmaster",
-                owner => "root",
-                group => "root",
-                mode => 644,
-                require => Package["puppetmaster"],
-        }
+        file {
+		"/etc/default/puppetmaster":
+                	source => "puppet://puppet/kbp-puppetmaster/default/puppetmaster",
+	                owner => "root",
+	                group => "root",
+	                mode => 644,
+	                require => Package["puppetmaster"];
+		"/srv/puppet":
+			ensure => directory,
+			owner => root,
+			group => root,
+			require => Package["puppetmaster"],
+			mode => 755;
+		"/srv/puppet/env":
+			ensure => directory,
+			owner => puppet,
+			group => root,
+			mode => 2770,
+			require => File["/srv/puppet"];
+		"/srv/puppet/generic":
+			ensure => directory,
+			owner => puppet,
+			group => root,
+			mode => 2770,
+			require => File["/srv/puppet"];
+		"/srv/puppet/kbp":
+			ensure => directory,
+			owner => puppet,
+			group => root,
+			mode => 2770,
+			require => File["/srv/puppet"];
+	}
 
         if tagged(nginx) {
                 nginx::site_config {
