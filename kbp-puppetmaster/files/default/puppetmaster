@@ -19,7 +19,7 @@ SERVERTYPE=mongrel
 
 # How many puppetmaster instances to start? Its pointless to set this
 # higher than 1 if you are not using mongrel.
-PUPPETMASTERS=2
+PUPPETMASTERS=3
 
 # What port should the puppetmaster listen on (default: 8140). If
 # PUPPETMASTERS is set to a number greater than 1, then the port for
