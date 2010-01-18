@@ -1,15 +1,23 @@
 class kbp-puppetmaster {
 	include munin::client
 
-        package { ["puppetmaster", "mongrel", "rails"]:
-                ensure => present,
+        package {
+		"puppetmaster":
+			ensure => present;
+		"mongrel":
+			ensure => present;
+		"rails":
+			ensure => present;
+		"darcs":
+			ensure => present;
         }
 
-        service { "puppetmaster":
-                ensure => running,
-                enable => true,
-                require => Package["puppetmaster"],
-                subscribe => File["/etc/default/puppetmaster"],
+        service {
+		"puppetmaster":
+			ensure => running,
+			enable => true,
+			require => Package["puppetmaster"],
+			subscribe => File["/etc/default/puppetmaster"];
         }
 
         file { "/etc/default/puppetmaster":
