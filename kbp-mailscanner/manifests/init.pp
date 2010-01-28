@@ -8,6 +8,7 @@ class kbp-mailscanner inherits amavisd-new {
 		group => "root",
 		mode => 644,
 		source => "puppet://puppet/kbp-mailscanner/amavis/conf.d/40-kbp",
+		require => Package["amavisd-new"],
 		notify => Service["amavis"],
 	}
 
@@ -47,7 +48,7 @@ class kbp-mailscanner::spamchecker inherits spamassassin {
 
 class kbp-mailscanner::virusscanner inherits clamav {
 	user { "clamav":
-		require => Package["clamav-daemon"],
+		require => Package["clamav-daemon","amavisd-new"],
 		groups => "amavis",
 	}
 }
