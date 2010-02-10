@@ -10,6 +10,9 @@ class kbp-puppetmaster {
 			ensure => present;
 		"darcs":
 			ensure => present;
+		# Needed because the default rails connect is crappy
+		"libmysql-ruby":
+			ensure => present;
         }
 
         service {
