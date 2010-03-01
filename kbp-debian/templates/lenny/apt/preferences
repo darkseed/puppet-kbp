@@ -17,8 +17,24 @@ Package: libvirt0
 Pin: release a=lenny-backports
 Pin-Priority: 999
 
+Package: facter
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
+Package: puppet
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
+Package: puppet-common
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
 <% if fqdn == "management.db.kumina.nl" -%>
 Package: rails
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
+Package: puppetmaster
 Pin: release a=lenny-backports
 Pin-Priority: 999
 <% end -%>
