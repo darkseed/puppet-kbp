@@ -38,6 +38,7 @@ class kbp-libvirt inherits libvirt {
 
 	munin::client::plugin {
 		["libvirt-blkstat", "libvirt-cputime", "libvirt-ifstat", "libvirt-mem"]:
-			require => Package["python-libvirt", "python-libxml2"];
+			require => Package["python-libvirt", "python-libxml2"],
+			script_path => "/usr/local/share/munin/plugins";
 	}
 }
