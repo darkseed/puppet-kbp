@@ -25,6 +25,18 @@ Package: virt-manager
 Pin: release a=lenny-backports
 Pin-Priority: 999
 
+Package: libasound2
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
+Package: libbrlapi0.5
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
+Package: kvm
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
 <% if fqdn == "management.db.kumina.nl" -%>
 Package: rails
 Pin: release a=lenny-backports
