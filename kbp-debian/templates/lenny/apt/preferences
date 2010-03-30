@@ -37,6 +37,10 @@ Package: kvm
 Pin: release a=lenny-backports
 Pin-Priority: 999
 
+Package: python-django
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
 <% if fqdn == "management.db.kumina.nl" -%>
 Package: rails
 Pin: release a=lenny-backports
