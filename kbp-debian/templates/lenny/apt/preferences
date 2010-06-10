@@ -37,6 +37,10 @@ Package: kvm
 Pin: release a=lenny-backports
 Pin-Priority: 999
 
+Package: rake
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
 Package: python-django
 Pin: release a=lenny-backports
 Pin-Priority: 999
