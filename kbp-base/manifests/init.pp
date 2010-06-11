@@ -102,11 +102,17 @@ class kbp-base {
                 ensure => installed,
         }
 
-        file { "/etc/sudoers":
-                source => "puppet://puppet/kbp-base/sudoers",
-                mode => 440,
-                owner => "root",
-                group => "root",
-                require => Package["sudo"],
+        file {
+		"/etc/sudoers":
+			source => "puppet://puppet/kbp-base/sudoers",
+			mode => 440,
+			owner => "root",
+			group => "root",
+			require => Package["sudo"];
+		"/etc/motd.tail":
+			source => "puppet://puppet/kbp-base/motd.tail",
+			mode => 644,
+			owner => "root",
+			group => "root";
         }
 }

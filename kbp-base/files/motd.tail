@@ -1,0 +1,14 @@
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+
+ATTENTION: Please keep in mind that all files in /etc are maintained by
+           Kumina bv. Any changes needed can be requested via email to
+           support@kumina.nl. Please clearly state which host(s) you are
+           requesting the change for.
+
+           DON'T CHANGE ANYTHING IN /etc MANUALLY PLEASE!! Thank you!
