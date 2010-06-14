@@ -50,3 +50,13 @@ Package: rails
 Pin: release a=lenny-backports
 Pin-Priority: 999
 <% end -%>
+<% if domain == "twenty-five.nl" -%>
+Package: linux-image-2.6-amd64
+Pin: release a=lenny-backports
+Pin-Priority: 999
+<% end -%>
+<% if fqdn == "srv01.prot.ehv.kumina.nl" -%>
+Package: linux-image-2.6-amd64
+Pin: release a=lenny-backports
+Pin-Priority: 999
+<% end -%>
