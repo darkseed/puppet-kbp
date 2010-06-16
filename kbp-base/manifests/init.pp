@@ -115,4 +115,12 @@ class kbp-base {
 			owner => "root",
 			group => "root";
         }
+
+	exec {
+		"uname -snrvm | tee /var/run/motd ; cat /etc/motd.tail >> /var/run/motd":
+			refreshonly => true,
+			path => ["/usr/bin", "/bin"],
+			require => File["/etc/motd.tail"],
+			subscribe => File["/etc/motd.tail"];
+	}
 }
