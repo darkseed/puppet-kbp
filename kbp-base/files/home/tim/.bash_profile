@@ -17,3 +17,5 @@ fi
 
 EMAIL=tim@kumina.nl
 export EMAIL
+
+alias puppet-module=/home/tim/bin/puppet-module-tool/bin/puppet-module
