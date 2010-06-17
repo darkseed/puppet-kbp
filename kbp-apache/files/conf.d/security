@@ -56,7 +56,17 @@ TraceEnable Off
 # The following lines prevent . files from being 
 # viewed by Web clients. 
 #
-<Files ~ "^\.">
+<FilesMatch "^\.">
     Order allow,deny
     Deny from all
-</Files>
+</FilesMatch>
+
+<DirectoryMatch "^(.*/)*\..*">
+    Order allow,deny
+    Deny from all
+</DirectoryMatch>
+
+<LocationMatch ^(.*/)\..*>
+    Order allow,deny
+    Deny from all
+</LocationMatch>
