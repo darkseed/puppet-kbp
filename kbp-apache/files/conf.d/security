@@ -47,3 +47,7 @@ ServerSignature Off
 #
 TraceEnable Off
 
+# Use only secure SSL settings
+<IfModule mod_ssl.c>
+	SSLCipherSuite HIGH:+TLSv1:!SSLv2:+SSLv3:!ADH:!aNULL:!eNULL:!NULL
+</IfModule>
