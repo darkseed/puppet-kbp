@@ -51,3 +51,12 @@ TraceEnable Off
 <IfModule mod_ssl.c>
 	SSLCipherSuite HIGH:+TLSv1:!SSLv2:+SSLv3:!ADH:!aNULL:!eNULL:!NULL
 </IfModule>
+
+#
+# The following lines prevent . files from being 
+# viewed by Web clients. 
+#
+<Files ~ "^\.">
+    Order allow,deny
+    Deny from all
+</Files>
