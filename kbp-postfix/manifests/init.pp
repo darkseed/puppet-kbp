@@ -9,6 +9,7 @@ class kbp-postfix inherits postfix {
 	# The Postfix init script copies /etc/ssl/certs stuff on (re)start, so restart Postfix
 	# on changes!
 	Service["postfix"] {
+		require => File["/etc/ssl/certs"],
 		subscribe => File["/etc/ssl/certs"],
 	}
 }
