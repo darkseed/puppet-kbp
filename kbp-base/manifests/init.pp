@@ -102,6 +102,11 @@ class kbp-base {
                 ensure => installed,
         }
 
+	package {
+		"binutils":
+			ensure => present;
+	}
+
         file {
 		"/etc/sudoers":
 			source => "puppet://puppet/kbp-base/sudoers",
