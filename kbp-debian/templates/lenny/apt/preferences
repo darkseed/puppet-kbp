@@ -9,6 +9,10 @@ Package: libvirt-bin
 Pin: release a=lenny-backports
 Pin-Priority: 999
 
+Package: virtinst
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
 Package: libvirt-doc
 Pin: release a=lenny-backports
 Pin-Priority: 999
