@@ -59,6 +59,13 @@ Package: linux-image-2.6-amd64
 Pin: release a=lenny-backports
 Pin-Priority: 999
 <% end -%>
+<% all_tags.each do |tag| -%>
+<% if tag == "kvm-host" -%>
+Package: linux-image-2.6-amd64
+Pin: release a=lenny-backports
+Pin-Priority: 999
+<% end -%>
+<% end -%>
 <% if fqdn == "srv01.prot.ehv.kumina.nl" -%>
 Package: linux-image-2.6-amd64
 Pin: release a=lenny-backports
