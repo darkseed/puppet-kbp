@@ -64,6 +64,10 @@ Pin-Priority: 999
 Package: linux-image-2.6-amd64
 Pin: release a=lenny-backports
 Pin-Priority: 999
+
+Package: firmware-bnx2
+Pin: release a=lenny-backports
+Pin-Priority: 999
 <% end -%>
 <% end -%>
 <% if fqdn == "srv01.prot.ehv.kumina.nl" -%>
