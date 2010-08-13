@@ -150,7 +150,7 @@ class kbp-debian inherits kbp-base {
 			sourcetype => "deb",
 			uri => "$aptproxy/debian/",
 			distribution => "${lsbdistcodename}",
-			components => "main";
+			components => "main contrib non-free";
 		"${lsbdistcodename}-security":
 			comment => "Security updates for $lsbdistcodename.",
 			sourcetype => "deb",
@@ -168,7 +168,7 @@ class kbp-debian inherits kbp-base {
 			sourcetype => "deb",
 			uri => "$aptproxy/backports",
 			distribution => "${lsbdistcodename}-backports",
-			components => "main",
+			components => "main contrib non-free",
 			require => Apt::Key["16BA136C"];
 		"kumina":
 			comment => "Local repository, for packages maintained by Kumina.",
