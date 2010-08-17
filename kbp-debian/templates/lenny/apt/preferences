@@ -75,3 +75,15 @@ Package: linux-image-2.6-amd64
 Pin: release a=lenny-backports
 Pin-Priority: 999
 <% end -%>
+
+<% if fqdn == "managementz.breezz.nl" -%>
+Package: rails
+Pin: release a=lenny-backports
+Pin-Priority: 999
+<% end -%>
+
+<% if fqdn == "management.breezz.nl" -%>
+Package: rails
+Pin: release a=lenny-backports
+Pin-Priority: 999
+<% end -%>
