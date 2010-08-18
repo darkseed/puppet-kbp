@@ -30,29 +30,33 @@ class kbp-puppetmaster {
 	                group => "root",
 	                mode => 644,
 	                require => Package["puppetmaster"];
+	}
+
+	# Enforce Puppet modules directory permissions.
+	file {
 		"/srv/puppet":
+			ensure => directory,
+			owner => puppet,
+			group => root,
+			require => Package["puppetmaster"],
+			mode => 550;
+		"/srv/puppet/env":
 			ensure => directory,
 			owner => root,
 			group => root,
-			require => Package["puppetmaster"],
-			mode => 755;
-		"/srv/puppet/env":
-			ensure => directory,
-			owner => puppet,
-			group => root,
-			mode => 2770,
+			mode => 2775,
 			require => File["/srv/puppet"];
 		"/srv/puppet/generic":
 			ensure => directory,
-			owner => puppet,
+			owner => root,
 			group => root,
-			mode => 2770,
+			mode => 2775,
 			require => File["/srv/puppet"];
 		"/srv/puppet/kbp":
 			ensure => directory,
-			owner => puppet,
+			owner => root,
 			group => root,
-			mode => 2770,
+			mode => 2775,
 			require => File["/srv/puppet"];
 	}
 
