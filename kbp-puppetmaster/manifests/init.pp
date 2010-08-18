@@ -42,22 +42,53 @@ class kbp-puppetmaster {
 			mode => 550;
 		"/srv/puppet/env":
 			ensure => directory,
-			owner => root,
-			group => root,
-			mode => 2775,
 			require => File["/srv/puppet"];
 		"/srv/puppet/generic":
 			ensure => directory,
-			owner => root,
-			group => root,
-			mode => 2775,
 			require => File["/srv/puppet"];
 		"/srv/puppet/kbp":
 			ensure => directory,
-			owner => root,
-			group => root,
-			mode => 2775,
 			require => File["/srv/puppet"];
+	}
+
+	# Enforce ownership and permissions using find.
+	exec {
+		"Fix directory permissions in /srv/puppet/env":
+			command => "/usr/bin/find /srv/puppet/env -type d -not -perm 2775 -exec /bin/chmod 2775 {} \;",
+			require => File["/srv/puppet/env"];
+		"Fix directory permissions in /srv/puppet/generic":
+			command => "/usr/bin/find /srv/puppet/generic -type d -not -perm 2775 -exec /bin/chmod 2775 {} \;",
+			require => File["/srv/puppet/generic"];
+		"Fix directory permissions in /srv/puppet/kbp":
+			command => "/usr/bin/find /srv/puppet/kbp -type d -not -perm 2775 -exec /bin/chmod 2775 {} \;",
+			require => File["/srv/puppet/kbp"];
+		"Fix file permissions in /srv/puppet/env":
+			command => "/usr/bin/find /srv/puppet/env -type f -not -perm 664 -exec /bin/chmod 664 {} \;",
+			require => File["/srv/puppet/env"];
+		"Fix file permissions in /srv/puppet/generic":
+			command => "/usr/bin/find /srv/puppet/generic -type f -not -perm 664 -exec /bin/chmod 664 {} \;",
+			require => File["/srv/puppet/generic"];
+		"Fix file permissions in /srv/puppet/kbp":
+			command => "/usr/bin/find /srv/puppet/kbp -type f -not -perm 664 -exec /bin/chmod 664 {} \;",
+			require => File["/srv/puppet/kbp"];
+		"Fix owner in /srv/puppet/env":
+			command => "/usr/bin/find /srv/puppet/env -not -uid 0 -exec /bin/chown root {} \;",
+			require => File["/srv/puppet/env"];
+		"Fix group in /srv/puppet/env":
+			command => "/usr/bin/find /srv/puppet/env -not -gid 0 -exec /bin/chgrp root {} \;",
+			require => File["/srv/puppet/env"];
+		"Fix owner in /srv/puppet/generic":
+			command => "/usr/bin/find /srv/puppet/generic -not -uid 0 -exec /bin/chown root {} \;",
+			require => File["/srv/puppet/generic"];
+		"Fix group in /srv/puppet/generic":
+			command => "/usr/bin/find /srv/puppet/generic -not -gid 0 -exec /bin/chgrp root {} \;",
+			require => File["/srv/puppet/generic"];
+		"Fix owner in /srv/puppet/kbp":
+			command => "/usr/bin/find /srv/puppet/kbp -not -uid 0 -exec /bin/chown root {} \;",
+			require => File["/srv/puppet/kbp"];
+		"Fix group in /srv/puppet/kbp":
+			command => "/usr/bin/find /srv/puppet/kbp -not -gid 0 -exec /bin/chgrp root {} \;",
+			require => File["/srv/puppet/kbp"];
 	}
 
         if tagged(nginx) {
