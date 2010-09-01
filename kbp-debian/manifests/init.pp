@@ -150,7 +150,7 @@ class kbp-debian inherits kbp-base {
 			sourcetype => "deb",
 			uri => "$aptproxy/debian/",
 			distribution => "${lsbdistcodename}",
-			components => "main contrib non-free";
+			components => "main non-free";
 		"${lsbdistcodename}-security":
 			comment => "Security updates for $lsbdistcodename.",
 			sourcetype => "deb",
