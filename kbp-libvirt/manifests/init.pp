@@ -26,7 +26,7 @@ class kbp-libvirt inherits libvirt {
 			group => "root",
 			mode => 755;
 		"/etc/libvirt/storage/guest.xml":
-			source => "puppet://puppet/kbp-libvirt/libvirt/storage/guest.xml",
+			source => "puppet:///modules/kbp-libvirt/libvirt/storage/guest.xml",
 			require => File["/etc/libvirt/storage"],
 			owner => "root",
 			group => "root",
