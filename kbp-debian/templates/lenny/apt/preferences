@@ -87,3 +87,8 @@ Package: rails
 Pin: release a=lenny-backports
 Pin-Priority: 999
 <% end -%>
+
+Package: rubygems
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
