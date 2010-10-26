@@ -92,3 +92,7 @@ Package: rubygems
 Pin: release a=lenny-backports
 Pin-Priority: 999
 
+Package: rubygems1.8
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
