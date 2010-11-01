@@ -1,10 +1,10 @@
 class kbp-base {
-        define staff_user($fullname, $uid, $password_hash) {
+        define staff_user($ensure = "present", $fullname, $uid, $password_hash) {
                 $username = $name
 
                 user { "$username":
                         comment => $fullname,
-                        ensure => present,
+                        ensure => $ensure,
                         gid => "kumina",
                         uid => $uid,
                         groups => ["adm", "staff", "root"],
@@ -15,68 +15,89 @@ class kbp-base {
 			password => $password_hash,
                 }
 
-                file { "/home/$username":
-                        ensure => directory,
-                        mode => 750,
-                        owner => "$username",
-                        group => "kumina",
-                        require => [User["$username"], Group["kumina"]],
-                }
+		if $ensure == "present" {
 
-                file { "/home/$username/.ssh":
-                        source => "puppet://puppet/kbp-base/home/$username/.ssh",
-                        mode => 700,
-                        owner => "$username",
-                        group => "kumina",
-                        require => File["/home/$username"],
-                }
+	                file { "/home/$username":
+        	                ensure => $ensure ? {
+					"present" => directory,
+					default   => absent,
+				},
+        	                mode => 750,
+                	        owner => "$username",
+                        	group => "kumina",
+	                        require => [User["$username"], Group["kumina"]],
+        	        }
 
-                file { "/home/$username/.ssh/authorized_keys":
-                        source => "puppet://puppet/kbp-base/home/$username/.ssh/authorized_keys",
-                        mode => 644,
-                        owner => "$username",
-                        group => "kumina",
-                        require => File["/home/$username"],
-                }
+	                file { "/home/$username/.ssh":
+				ensure => $ensure,
+                	        source => "puppet://puppet/kbp-base/home/$username/.ssh",
+                        	mode => 700,
+	                        owner => "$username",
+        	                group => "kumina",
+                	        require => File["/home/$username"],
+	                }
 
-                file { "/home/$username/.bashrc":
-                        content => template("kbp-base/home/$username/.bashrc"),
-                        mode => 644,
-                        owner => "$username",
-                        group => "kumina",
-                        require => File["/home/$username"],
-                }
+        	        file { "/home/$username/.ssh/authorized_keys":
+				ensure => $ensure,
+                        	source => "puppet://puppet/kbp-base/home/$username/.ssh/authorized_keys",
+	                        mode => 644,
+        	                owner => "$username",
+                	        group => "kumina",
+                        	require => File["/home/$username"],
+	                }
 
-                file { "/home/$username/.bash_profile":
-                        source => "puppet://puppet/kbp-base/home/$username/.bash_profile",
-                        mode => 644,
-                        owner => "$username",
-                        group => "kumina",
-                        require => File["/home/$username"],
-                }
+	                file { "/home/$username/.bashrc":
+				ensure => $ensure,
+                	        content => template("kbp-base/home/$username/.bashrc"),
+                        	mode => 644,
+	                        owner => "$username",
+        	                group => "kumina",
+                	        require => File["/home/$username"],
+                	}
 
-                file { "/home/$username/.bash_aliases":
-                        source => "puppet://puppet/kbp-base/home/$username/.bash_aliases",
-                        mode => 644,
-                        owner => "$username",
-                        group => "kumina",
-                        require => File["/home/$username"],
-                }
+	                file { "/home/$username/.bash_profile":
+				ensure => $ensure,
+                	        source => "puppet://puppet/kbp-base/home/$username/.bash_profile",
+                        	mode => 644,
+	                        owner => "$username",
+        	                group => "kumina",
+                	        require => File["/home/$username"],
+                	}
 
-                file { "/home/$username/.darcs":
-                        ensure => directory,
-                        mode => 755,
-                        owner => "$username",
-                        group => "kumina",
-                        require => File["/home/$username"],
-                }
+	                file { "/home/$username/.bash_aliases":
+				ensure => $ensure,
+                	        source => "puppet://puppet/kbp-base/home/$username/.bash_aliases",
+                        	mode => 644,
+	                        owner => "$username",
+        	                group => "kumina",
+                	        require => File["/home/$username"],
+	                }
 
-                file { "/home/$username/.darcs/author":
-                        mode => 644,
-                        content => "$fullname <$username@kumina.nl>\n",
-                        group => "kumina",
-                        require => File["/home/$username/.darcs"],
-                }
+        	        file { "/home/$username/.darcs":
+                	        ensure => $ensure ? {
+					"present" => directory,
+					default   => absent,
+				},
+        	                mode => 755,
+                	        owner => "$username",
+                        	group => "kumina",
+	                        require => File["/home/$username"],
+        	        }
+	
+        	        file { "/home/$username/.darcs/author":
+				ensure => $ensure,
+                        	mode => 644,
+	                        content => "$fullname <$username@kumina.nl>\n",
+        	                group => "kumina",
+                	        require => File["/home/$username/.darcs"],
+	                }
+		} else {
+			file { "/home/$username":
+				ensure  => absent,
+				force   => true,
+				recurse => true,
+			}
+		}
         }
 
         # Add the Kumina group and users
@@ -94,8 +115,13 @@ class kbp-base {
                         fullname => "Kees Meijs",
                         uid => 10002;
 		"rutger":
+			fullname => "Rutger Spiertz",
+			uid => 10003;
+		"mike":
 			fullname => "Mike Huijerjans",
-			uid => 10000;
+			uid => 10000,
+			password_hash => "BOGUS",
+			ensure => absent;
         }
 
         package { "sudo":
