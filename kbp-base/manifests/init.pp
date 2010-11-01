@@ -93,7 +93,7 @@ class kbp-base {
                 "kees":
                         fullname => "Kees Meijs",
                         uid => 10002;
-		"mike":
+		"rutger":
 			fullname => "Mike Huijerjans",
 			uid => 10000;
         }
