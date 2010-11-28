@@ -23,6 +23,7 @@ class kbp-debian inherits kbp-base {
 
         include apt
 	include "kbp-debian::$lsbdistcodename"
+	include rng-tools
 
         define check_alternatives($linkto) {
                 exec { "/usr/sbin/update-alternatives --set $name $linkto":
