@@ -193,7 +193,7 @@ class kbp-debian inherits kbp-base {
 	# Package which makes sure the installed Kumina repository key is
 	# up-to-date.
 	package { "kumina-archive-keyring":
-		ensure => installed,
+		ensure => latest,
 	}
 
 	# Package which makes sure the installed Backports.org repository key is
