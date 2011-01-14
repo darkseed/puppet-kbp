@@ -87,9 +87,7 @@ Pin-Priority: 999
 Package: rails
 Pin: release a=lenny-backports
 Pin-Priority: 999
-<% end -%>
 
-<% if fqdn == "management.breezz.nl" -%>
 Package: rails
 Pin: release a=lenny-backports
 Pin-Priority: 999
@@ -99,7 +97,7 @@ Package: drbd8-utils
 Pin: release a=lenny-backports
 Pin-Priority: 999
 
-<% if fqdn == "dbm1.sys.iqnomy.com" or fqdn == "dbm2.sys.iqnomy.com" -%>
+<% if fqdn == "db1.sys.iqnomy.com" or fqdn == "db2.sys.iqnomy.com" or fqdn == "file1.sys.iqnomy.com" or fqdn == "file2.sys.iqnomy.com" -%>
 Package: linux-image-2.6-amd64
 Pin: release a=lenny-backports
 Pin-Priority: 999
@@ -108,4 +106,3 @@ Package: heartbeat
 Pin: release a=lenny-backports
 Pin-Priority: 999
 <% end -%>
-
