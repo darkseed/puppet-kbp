@@ -145,6 +145,12 @@ class kbp-base {
 			mode => 644,
 			owner => "root",
 			group => "root";
+                # We set this to make sure the console never blanks
+                "/etc/console-tools/config":
+                        source  => "puppet:///modules/kbp-base/console-tools/config",
+                        owner   => "root",
+                        group   => "root",
+                        mode    => 644;
         }
 
 	exec {

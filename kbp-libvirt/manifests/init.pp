@@ -12,27 +12,27 @@ class kbp-libvirt inherits libvirt {
 	file {
 		"/etc/libvirt/qemu/networks/default.xml":
 			require => Package["libvirt-bin"],
-			ensure => absent;
+			ensure  => absent;
 		"/etc/libvirt/storage":
-			ensure => directory,
+			ensure  => directory,
 			require => Package["libvirt-bin"],
-			owner => "root",
-			group => "root",
-			mode => 755;
+			owner   => "root",
+			group   => "root",
+			mode    => 755;
 		"/etc/libvirt/storage/autostart":
-			ensure => directory,
+			ensure  => directory,
 			require => File["/etc/libvirt/storage"],
-			owner => "root",
-			group => "root",
-			mode => 755;
+			owner   => "root",
+			group   => "root",
+			mode    => 755;
 		"/etc/libvirt/storage/guest.xml":
-			source => "puppet:///modules/kbp-libvirt/libvirt/storage/guest.xml",
+			source  => "puppet:///modules/kbp-libvirt/libvirt/storage/guest.xml",
 			require => File["/etc/libvirt/storage"],
-			owner => "root",
-			group => "root",
-			mode => 644;
+			owner   => "root",
+			group   => "root",
+			mode    => 644;
 		"/etc/libvirt/storage/autostart/guest.xml":
-			ensure => "/etc/libvirt/storage/guest.xml",
+			ensure  => "/etc/libvirt/storage/guest.xml",
 			require => File["/etc/libvirt/storage/autostart"];
 	}
 
