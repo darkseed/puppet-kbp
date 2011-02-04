@@ -16,6 +16,32 @@ class kbp-debian::lenny {
 			group => "root",
 			mode => 644;
 	}
+
+	apt::source {
+		"${lsbdistcodename}-volatile":
+			comment => "Repository for volatile packages in $lsbdistcodename, such as SpamAssassin and Clamav",
+			sourcetype => "deb",
+			uri => "$aptproxy/debian-volatile/",
+			distribution => "${lsbdistcodename}/volatile",
+			components => "main";
+	}
+}
+
+class kbp-debian::squeeze {
+	# Don't pull in Recommends or Suggests dependencies when installing
+	# packages with apt.
+	file {
+		"/etc/apt/apt.conf.d/no-recommends":
+			content => "APT::Install-Recommends \"false\";\n",
+			owner => "root",
+			group => "root",
+			mode => 644;
+		"/etc/apt/apt.conf.d/no-suggests":
+			content => "APT::Install-Suggests \"false\";\n",
+			owner => "root",
+			group => "root",
+			mode => 644;
+	}
 }
 
 class kbp-debian inherits kbp-base {
@@ -157,12 +183,6 @@ class kbp-debian inherits kbp-base {
 			sourcetype => "deb",
 			uri => "$aptproxy/security/",
 			distribution => "${lsbdistcodename}/updates",
-			components => "main";
-		"${lsbdistcodename}-volatile":
-			comment => "Repository for volatile packages in $lsbdistcodename, such as SpamAssassin and Clamav",
-			sourcetype => "deb",
-			uri => "$aptproxy/debian-volatile/",
-			distribution => "${lsbdistcodename}/volatile",
 			components => "main";
 		"${lsbdistcodename}-backports":
 			comment => "Repository for packages which have been backported to $lsbdistcodename.",
