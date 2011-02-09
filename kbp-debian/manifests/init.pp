@@ -25,6 +25,10 @@ class kbp-debian::lenny {
 			distribution => "${lsbdistcodename}/volatile",
 			components => "main";
 	}
+
+        package { "mailx":
+                ensure => installed
+        }
 }
 
 class kbp-debian::squeeze {
@@ -42,6 +46,10 @@ class kbp-debian::squeeze {
 			group => "root",
 			mode => 644;
 	}
+
+        package { "bsd-mailx":
+                ensure => installed
+        }
 }
 
 class kbp-debian inherits kbp-base {
@@ -62,7 +70,7 @@ class kbp-debian inherits kbp-base {
           "file", "debsums", "dlocate", "gnupg", "ucf", "elinks", "reportbug",
           "tree", "netcat", "openssh-client", "tcpdump", "iproute", "acl",
           "psmisc", "udev", "lsof", "bzip2", "strace", "pinfo", "lsb-release",
-          "ethtool", "mailx", "host", "socat", "make", "nscd"]
+          "ethtool", "host", "socat", "make", "nscd"]
         package { $wantedpackages:
                 ensure => installed
         }
