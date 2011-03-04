@@ -1,4 +1,6 @@
 class kbp-base {
+	include grub
+	include kbp_vim
         define staff_user($ensure = "present", $fullname, $uid, $password_hash) {
                 $username = $name
 
@@ -109,19 +111,31 @@ class kbp-base {
 
         staff_user {
                 "tim":
-                        fullname => "Tim Stoop",
-                        uid => 10001;
+                        fullname      => "Tim Stoop",
+                        uid           => 10001,
+			password_hash => "BOGUS";
                 "kees":
-                        fullname => "Kees Meijs",
-                        uid => 10002;
-		"rutger":
-			fullname => "Rutger Spiertz",
-			uid => 10003;
-		"mike":
-			fullname => "Mike Huijerjans",
-			uid => 10000,
+                        fullname      => "Kees Meijs",
 			password_hash => "BOGUS",
-			ensure => absent;
+                        uid           => 10002,
+			ensure        => absent;
+		"mike":
+			fullname      => "Mike Huijerjans",
+			uid           => 10000,
+			password_hash => "BOGUS",
+			ensure        => absent;
+		"pieter":
+			fullname      => "Pieter Lexis",
+			uid           => 10005,
+			password_hash => "BOGUS";
+		"rutger":
+			fullname      => "Rutger Spiertz",
+			uid           => 10003,
+			password_hash => "BOGUS";
+		"ed":
+			fullname      => "Ed Schouten",
+			uid           => 10004,
+			password_hash => "BOGUS";
         }
 
         package { "sudo":
@@ -145,12 +159,6 @@ class kbp-base {
 			mode => 644,
 			owner => "root",
 			group => "root";
-                # We set this to make sure the console never blanks
-                "/etc/console-tools/config":
-                        source  => "puppet:///modules/kbp-base/console-tools/config",
-                        owner   => "root",
-                        group   => "root",
-                        mode    => 644;
         }
 
 	exec {

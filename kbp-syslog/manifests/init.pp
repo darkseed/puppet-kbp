@@ -30,6 +30,18 @@ class kbp-syslog::server::lenny inherits rsyslog::server {
 class kbp-syslog::client::lenny inherits rsyslog::client {
 }
 
+class kbp-syslog::server::squeeze inherits rsyslog::server {
+	file { "/etc/logrotate.d/rsyslog":
+		source => "puppet://puppet/kbp-syslog/server/logrotate.d/rsyslog",
+		owner => "root",
+		group => "root",
+		mode => 644,
+	}
+}
+
+class kbp-syslog::client::squeeze inherits rsyslog::client {
+}
+
 # Additional options
 class kbp-syslog::server::mysql {
 	include kbp-syslog::server

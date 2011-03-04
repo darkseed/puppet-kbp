@@ -1,5 +1,7 @@
 class kbp-puppetmaster {
 	include munin::client
+	include kbp_vim
+	include kbp_vim::addon-manager
 
         package {
 		"puppetmaster":
@@ -30,6 +32,15 @@ class kbp-puppetmaster {
 	                group => "root",
 	                mode => 644,
 	                require => Package["puppetmaster"];
+	}
+
+	# Install vim-puppet syntax higlighting rules and turn them on
+	package { "vim-puppet":
+		ensure => "latest",
+	}
+	exec { "Install syntax highlighting for .pp files":
+		command => "/usr/bin/vim-addons -w puppet install;",
+		creates => "/var/lib/vim/addons/syntax/puppet.vim",
 	}
 
 	# Enforce Puppet modules directory permissions.

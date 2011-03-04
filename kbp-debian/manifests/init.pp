@@ -29,6 +29,12 @@ class kbp-debian::lenny {
         package { "mailx":
                 ensure => installed
         }
+
+	# Package which makes sure the installed Backports.org repository key is
+	# up-to-date.
+	package { "debian-backports-keyring":
+		ensure => installed,
+	}
 }
 
 class kbp-debian::squeeze {
@@ -222,12 +228,6 @@ class kbp-debian inherits kbp-base {
 	# up-to-date.
 	package { "kumina-archive-keyring":
 		ensure => latest,
-	}
-
-	# Package which makes sure the installed Backports.org repository key is
-	# up-to-date.
-	package { "debian-backports-keyring":
-		ensure => installed,
 	}
 
         file { "/etc/apt/preferences":
