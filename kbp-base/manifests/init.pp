@@ -110,14 +110,14 @@ class kbp-base {
         }
 
         staff_user {
-                "tim":
-                        fullname      => "Tim Stoop",
-                        uid           => 10001,
+         "tim":
+			fullname      => "Tim Stoop",
+            uid           => 10001,
 			password_hash => "BOGUS";
-                "kees":
-                        fullname      => "Kees Meijs",
+         "kees":
+            fullname      => "Kees Meijs",
 			password_hash => "BOGUS",
-                        uid           => 10002,
+            uid           => 10002,
 			ensure        => absent;
 		"mike":
 			fullname      => "Mike Huijerjans",
