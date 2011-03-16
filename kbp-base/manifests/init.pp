@@ -138,14 +138,31 @@ class kbp-base {
 			password_hash => "BOGUS";
         }
 
-        package { "sudo":
-                ensure => installed,
-        }
-
-	package {
-		"binutils":
-			ensure => present;
+	package { "binutils":
+		ensure => present;
 	}
+
+    package { "diffstat":
+        ensure => installed,
+    }
+
+    package { "hidesvn":
+    	ensure => installed,
+    }
+
+    package { "tcptraceroute":
+        ensure => installed,
+    }
+
+	if versioncmp($lsbdistrelease, 6.0) < 0 {
+		package { "tcptrack":
+    		ensure => latest,
+    	}
+	}
+
+    package { "sudo":
+    	ensure => installed,
+    }
 
         file {
 		"/etc/sudoers":
