@@ -5,8 +5,9 @@ class kbp_hetzner inherits hetzner {
 		ensure => "latest";
 	}
 
-	munin::client::plugin { "sensors_":
-		require => Package["lm-sensors"];
+	munin::client::plugin { "sensors_temp":
+		require => Package["lm-sensors"],
+		script  => "sensors_",
 	}
 
 	exec { "/sbin/modprobe f71882fg":

@@ -4,23 +4,24 @@ alias twenty_five_get_free_port='sudo grep port /etc/libvirt/qemu/*'
 alias twenty_five_get_free_ip='cat /etc/dhcp3/dhcpd.conf'
 
 if [ -d "/srv/puppet" ]; then
-	$no_comments=""
-	$search_string=""
-	while [ "$1" != "" ]; do
-		case $1 in
-			-n )	$no_comments="true" 
-					;;
-			* )		$search_string="$search_string $1"
-					shift 
-					;;
-		esac
-	done
-	echo $search_string
+
 	function rgreppuppet {
-		if [ $no_comments == "true" ]; then
-			hidesvn rgrep $search_string /srv/puppet | grep -v '[[:space:]]*#'
+		no_comments=""
+		search_string=""
+			while [ "$1" != "" ]; do
+				case $1 in
+					-n )	no_comments="true" 
+							shift
+							;;
+					* )		search_string="$search_string $1"
+							shift 
+							;;
+				esac
+			done
+		if [ "$no_comments" == "true" ]; then
+			hidesvn rgrep "$search_string" /srv/puppet | grep -v '[[:space:]]*#'
 		else
-			hidesvn rgrep $search_string /srv/puppet
+			hidesvn rgrep "$search_string" /srv/puppet
 		fi
 	}
 fi

@@ -36,9 +36,29 @@ class kbp-libvirt inherits libvirt {
 			require => File["/etc/libvirt/storage/autostart"];
 	}
 
-	munin::client::plugin {
-		["libvirt-blkstat", "libvirt-cputime", "libvirt-ifstat", "libvirt-mem"]:
-			require => Package["python-libvirt", "python-libxml2"],
-			script_path => "/usr/local/share/munin/plugins";
+	if versioncmp($lsbdistrelease, "5.0") < 0{
+		munin::client::plugin {
+			["libvirt-blkstat", "libvirt-cputime", "libvirt-ifstat", "libvirt-mem"]:
+				require => Package["python-libvirt", "python-libxml2"],
+				script_path => "/usr/local/share/munin/plugins";
+		}
+	}
+
+	if versioncmp($lsbdistrelease, "6.0") >= 0 {
+		package { "munin-libvirt-plugins":
+			ensure => latest,
+		}
+
+		munin::client::plugin {
+			["libvirt-blkstat", "libvirt-cputime", "libvirt-ifstat", "libvirt-mem"]:
+				require => Package["munin-libvirt-plugins"],
+				script_path => "/usr/share/munin/plugins";
+		}
+	}
+
+	munin::client::plugin::config {
+		"libvirt":
+			section => "libvirt-*",
+			content => "user root";
 	}
 }

@@ -1,6 +1,7 @@
 class kbp-base {
 	include grub
 	include kbp_vim
+	include kbp_time
         define staff_user($ensure = "present", $fullname, $uid, $password_hash) {
                 $username = $name
 
