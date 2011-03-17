@@ -53,9 +53,18 @@ class kbp-debian::squeeze {
 			mode => 644;
 	}
 
-        package { "bsd-mailx":
-                ensure => installed
-        }
+	apt::source {
+	        "${lsbdistcodename}-updates":
+		            comment => "Repository for update packages in $lsbdistcodename, such as SpamAssassin and Clamav",
+		            sourcetype => "deb",
+		            uri => "$aptproxy/debian/",
+		            distribution => "${lsbdistcodename}-updates",
+		            components => "main";
+	}
+
+	package { "bsd-mailx":
+		ensure => installed
+	}
 }
 
 class kbp-debian inherits kbp-base {

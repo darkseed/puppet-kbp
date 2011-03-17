@@ -1,0 +1,108 @@
+Explanation: Packages from the Kumina repository get priority over packages from official
+Explanation: Debian repositories.
+Package: *
+Pin: release <%= lsbdistcodename %>-kumina
+Pin-Priority: 999
+
+Explanation: The default Lenny libvirt packages are broken.
+Package: libvirt-bin
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
+Package: virtinst
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
+Package: libvirt-doc
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
+Package: libvirt0
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
+Package: facter
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
+Package: virt-manager
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
+Package: libasound2
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
+Package: libbrlapi0.5
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
+Package: kvm
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
+Package: rake
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
+Package: python-django
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
+Package: varnish
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
+<% if fqdn == "management.db.kumina.nl" -%>
+Package: rails
+Pin: release a=lenny-backports
+Pin-Priority: 999
+<% end -%>
+
+<% if domain == "twenty-five.nl" -%>
+Package: linux-image-2.6-amd64
+Pin: release a=lenny-backports
+Pin-Priority: 999
+<% end -%>
+
+<% all_tags.each do |tag| -%>
+<% if tag == "kvm-host" -%>
+Package: linux-image-2.6-amd64
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
+Package: firmware-bnx2
+Pin: release a=lenny-backports
+Pin-Priority: 999
+<% end -%>
+<% end -%>
+
+<% if fqdn == "srv01.prot.ehv.kumina.nl" -%>
+Package: linux-image-2.6-amd64
+Pin: release a=lenny-backports
+Pin-Priority: 999
+<% end -%>
+
+<% if fqdn == "managementz.breezz.nl" -%>
+Package: rails
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
+Package: rails
+Pin: release a=lenny-backports
+Pin-Priority: 999
+<% end -%>
+
+Package: drbd8-utils
+Pin: release a=lenny-backports
+Pin-Priority: 999
+
+<% if fqdn == "db1.sys.iqnomy.com" or fqdn == "db2.sys.iqnomy.com" or fqdn == "file1.sys.iqnomy.com" or fqdn == "file2.sys.iqnomy.com" -%>
+Package: linux-image-2.6-amd64
+Pin: release a=lenny-backports
+Pin-Priority: 999
+<% end -%>
+
+Package: heartbeat
+Pin: release a=lenny-backports
+Pin-Priority: 999
