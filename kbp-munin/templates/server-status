@@ -1,0 +1,13 @@
+<IfModule mod_status.c>
+	ExtendedStatus on
+	<Location /server-status>
+		SetHandler server-status
+		Order Deny,Allow
+		Deny from all
+		Allow from localhost
+		Allow from 127.0.0.1
+		Allow from <%= fqdn %>
+		Allow from ::1
+		Allow from ip6-localhost
+	</Location>
+</IfModule>
