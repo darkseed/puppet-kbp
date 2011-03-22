@@ -1,4 +1,5 @@
 class kbp-apache inherits apache {
+	include kbp-munin::client::apache
 	file {
 		"/etc/apache2/mods-available/deflate.conf":
 			source => "puppet://puppet/kbp-apache/mods-available/deflate.conf",

@@ -4,6 +4,8 @@ class kbp_vim {
 		"set ai":;
 		"set ts=4":;
 		"set bg=dark":;
+		"set list":;
+		"set listchars=tab:»˙,trail:•":;
 	}
 
 	define global_vim_setting {

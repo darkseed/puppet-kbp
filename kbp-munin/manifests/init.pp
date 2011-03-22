@@ -4,6 +4,30 @@ class kbp-munin::client inherits munin::client {
 	}
 }
 
+class kbp-munin::client::apache {
+	# This class is should be included in kbp-apache to collect apache data for munin
+	include kbp-munin::client
+	
+	package { "libwww-perl":
+		ensure => installed;
+	}
+
+	file {
+		"/etc/apache2/conf.d/server-status":
+			content => template("kbp-munin/server-status"),
+			owner   => "root",
+			group   => "root",
+			mode    => 644,
+			notify  => Exec["reload-apache2"];
+	}
+
+	munin::client::plugin {
+		"apache_accesses":;
+		"apache_processes":;
+		"apache_volume":;
+	}
+}
+
 class kbp-munin::server inherits munin::server {
 	include nagios::nsca
 
