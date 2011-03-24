@@ -2,7 +2,7 @@ class kbp_vim {
 	global_vim_setting {
 		"syntax on":;
 		"set ai":;
-		"set ts=4":;
+		"set ts=8":;
 		"set bg=dark":;
 		"set list":;
 		"set listchars=tab:»˙,trail:•":;
