@@ -2,6 +2,13 @@ class kbp-base {
 	include grub
 	include kbp_vim
 	include kbp_time
+	include kbp_sudo
+
+	kbp_sudo::add_source { "Kumina default sudoers file":
+		source 	=> "puppet:///modules/kbp-base/sudoers",
+		order	=> 10;
+	}
+
 	define staff_user($ensure = "present", $fullname, $uid, $password_hash) {
 		$username = $name
 		user { "$username":
@@ -143,7 +150,6 @@ class kbp-base {
 		"diffstat":			ensure => installed;
 		"hidesvn":			ensure => latest;
 		"tcptraceroute":	ensure => installed;
-		"sudo":				ensure => installed;
 		"bash-completion":	ensure => latest;
     }
 
@@ -154,12 +160,6 @@ class kbp-base {
 	}
 
 	file {
-		"/etc/sudoers":
-			source 	=> "puppet://puppet/kbp-base/sudoers",
-			mode 	=> 440,
-			owner 	=> "root",
-			group 	=> "root",
-			require => Package["sudo"];
 		"/etc/motd.tail":
 			source 	=> "puppet://puppet/kbp-base/motd.tail",
 			mode 	=> 644,

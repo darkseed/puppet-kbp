@@ -1,18 +1,9 @@
 # /etc/sudoers
 #
-# This file MUST be edited with the 'visudo' command as root.
-#
-# See the man page for details on how to write a sudoers file.
+# This file is maintained in puppet by Kumina. DO NOT change locally
 #
 
 Defaults	env_reset
-
-# Host alias specification
-
-# User alias specification
-
-# Cmnd alias specification
-
-# User privilege specification
+# Default rules
 root	ALL=(ALL) ALL
 %root	ALL=(ALL) PASSWD: ALL
