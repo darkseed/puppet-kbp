@@ -99,6 +99,20 @@ class kbp-base {
 				group => "kumina",
 				require => File["/home/$username/.darcs"],
 			}
+
+			file { "/home/$username/.gitconfig":
+				ensure => $ensure,
+				mode => 644,
+				content => "[user]\n\tname = $fullname\n\temail = $username@kumina.nl\n",
+				group => "kumina";
+			}
+
+			file { "/home/$username/.reportbugrc":
+				ensure => $ensure,
+				mode => 644,
+				content => "REPORTBUGEMAIL=$username@kumina.nl\n",
+				group => "kumina";
+			}
 		} else {
 			file { "/home/$username":
 				ensure  => absent,
