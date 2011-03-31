@@ -6,6 +6,11 @@ class kbp_vim {
 		"set bg=dark":;
 		"set list":;
 		"set listchars=tab:»˙,trail:•":;
+		"set backupdir=~/.tmp/":
+			require => Global_vim_setting['silent execute "!mkdir -p ~/.tmp"'];
+		"set directory=~/.tmp/":
+			require => Global_vim_setting['silent execute "!mkdir -p ~/.tmp"'];
+		'silent execute "!mkdir -p ~/.tmp"':;
 	}
 
 	define global_vim_setting {
