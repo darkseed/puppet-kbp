@@ -92,6 +92,17 @@ class kbp-base {
 				require => File["/home/$username"],
 			}
 
+			file { "/home/$username/.tmp":
+				ensure => $ensure ? {
+					"present" => directory,
+					default   => absent,
+				},
+				mode 	=> 755,
+				owner 	=> "$username",
+				group 	=> "kumina",
+				require => File["/home/$username"],
+			}
+
 			file { "/home/$username/.darcs/author":
 				ensure => $ensure,
 				mode => 644,
