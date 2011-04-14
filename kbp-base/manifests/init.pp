@@ -1,12 +1,27 @@
 class kbp-base {
+	include gen_base
 	include grub
+	include kbp_acpi
+	include kbp_apt
+	include kbp_puppet
 	include kbp_vim
 	include kbp_time
 	include kbp_sudo
+	include kbp_icinga::client
 
-	kbp_sudo::add_source { "Kumina default sudoers file":
-		source 	=> "puppet:///modules/kbp-base/sudoers",
-		order	=> 10;
+	gen_sudo::rule {
+		"User root has total control":
+			entity            => "root",
+			as_user           => "ALL",
+			command           => "ALL",
+			password_required => true,
+			order             => 10; # legacy, only used on lenny systems
+		"Kumina default rule":
+			entity            => "%root",
+			as_user           => "ALL",
+			command           => "ALL",
+			password_required => true,
+			order             => 10; # legacy, only used on lenny systems
 	}
 
 	define staff_user($ensure = "present", $fullname, $uid, $password_hash) {
@@ -170,16 +185,15 @@ class kbp-base {
 	}
 
 	# Packages we like and want :)
-	package {
-		"binutils":			ensure => present;
-		"diffstat":			ensure => installed;
-		"hidesvn":			ensure => latest;
-		"tcptraceroute":	ensure => installed;
-		"bash-completion":	ensure => latest;
+	kpackage {
+		["binutils"]:
+			ensure => installed;
+		["hidesvn","bash-completion","bc","tcptraceroute","diffstat"]:
+			ensure => latest;
     }
-
+	
 	if versioncmp($lsbdistrelease, 6.0) < 0 {
-		package { "tcptrack":
+		kpackage { "tcptrack":
 			ensure => latest,
 		}
 	}

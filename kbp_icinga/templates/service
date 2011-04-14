@@ -1,0 +1,32 @@
+define service {
+	name                         <%= name %><% if service_description != "false" %>
+	service_description          <%= service_description %><% end %>
+	host_name                    <%= hostname %><% if hostgroup_name != "false" %>
+	hostgroup_name               <%= hostgroup_name %><% end %><% if initialstate != "false" %>
+	initial_state                <%= initialstate %><% end %><% if active_checks_enabled != "false" %>
+	active_checks_enabled        <%= active_checks_enabled %><% end %><% if passive_checks_enabled != "false" %>
+	passive_checks_enabled       <%= passive_checks_enabled %><% end %><% if parallelize_check != "false" %>
+	parallelize_check            <%= parallelize_check %><% end %><% if obsess_over_service != "false" %>
+	obsess_over_service          <%= obsess_over_service %><% end %><% if check_freshness != "false" %>
+	check_freshness              <%= check_freshness %><% end %><% if freshnessthreshold != "false" %>
+	freshness_threshold          <%= freshnessthreshold %><% end %><% if notifications_enabled != "false" %>
+	notifications_enabled        <%= notifications_enabled %><% end %><% if event_handler_enabled != "false" %>
+	event_handler_enabled        <%= event_handler_enabled %><% end %><% if flap_detection_enabled != "false" %>
+	flap_detection_enabled       <%= flap_detection_enabled %><% end %><% if failure_prediction_enabled != "false" %>
+	failure_prediction_enabled   <%= failure_prediction_enabled %><% end %><% if process_perf_data != "false" %>
+	process_perf_data            <%= process_perf_data %><% end %><% if retain_status_information != "false" %>
+	retain_status_information    <%= retain_status_information %><% end %><% if retain_nonstatus_information != "false" %>
+	retain_nonstatus_information <%= retain_nonstatus_information %><% end %><% if notification_interval != "false" %>
+	notification_interval        <%= notification_interval %><% end %><% if is_volatile != "false" %>
+	is_volatile                  <%= is_volatile %><% end %><% if check_period != "false" %>
+	check_period                 <%= check_period %><% end %><% if retry_check_interval != "false" %>
+	retry_check_interval         <%= retry_check_interval %><% end %><% if notification_period != "false" %>
+	notification_period          <%= notification_period %><% end %><% if notification_options != "false" %>
+	notification_options         <%= notification_options %><% end %><% if use != "false" %>
+	use                          <%= use %><% end %><% if contact_groups != "false" %>
+	contact_groups               <%= contact_groups %><% end %><% if servicegroups != "false" %>
+	servicegroups                <%= servicegroups %><% end %><% if max_check_attempts != "false" %>
+	max_check_attempts           <%= max_check_attempts %><% end %><% if checkcommand != "false" %>
+	check_command                <%= checkcommand %><% if argument1 %>!<%= argument1 %><% end %><% if argument2 %>!<%= argument2 %><% end %><% if argument3 %>!<%= argument3 %><% end %><% end %><% if register != "false" %>
+	register                     <%= register %><% end %>
+}

@@ -1,0 +1,12 @@
+define contact {
+	contact_name                  <%= name %>
+	alias                         <%= c_alias %>
+	service_notification_options  w,u,c,r
+	host_notification_options     d,u,r
+	host_notification_period      <%= timeperiod %>
+	service_notification_period   <%= timeperiod %>
+	service_notification_commands notify-service-by-<%= notification_type %>
+	host_notification_commands    notify-host-by-<%= notification_type %><% if contactgroups != "false" %>
+	contactgroups                 <%= contactgroups %><% end %>
+	<% if notification_type = "sms" %>pager<% else %>email<% end %>                         <%= contact_data %>
+}

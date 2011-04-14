@@ -1,16 +1,17 @@
 class kbp-munin::client inherits munin::client {
-	package { "libnet-snmp-perl":
-		ensure => installed,
+	kpackage { "libnet-snmp-perl":; }
+
+	munin::client::plugin::config { "files_user_plugin":
+		section => "files_user_*",
+		content => "user root";
 	}
 }
 
 class kbp-munin::client::apache {
 	# This class is should be included in kbp-apache to collect apache data for munin
 	include kbp-munin::client
-	
-	package { "libwww-perl":
-		ensure => installed;
-	}
+
+	kpackage { "libwww-perl":; }
 
 	file {
 		"/etc/apache2/conf.d/server-status":

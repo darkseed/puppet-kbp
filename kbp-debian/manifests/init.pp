@@ -17,7 +17,7 @@ class kbp-debian::lenny {
 			mode => 644;
 	}
 
-	apt::source {
+	gen_apt::source {
 		"${lsbdistcodename}-volatile":
 			comment => "Repository for volatile packages in $lsbdistcodename, such as SpamAssassin and Clamav",
 			sourcetype => "deb",
@@ -40,20 +40,14 @@ class kbp-debian::lenny {
 class kbp-debian::squeeze {
 	# Don't pull in Recommends or Suggests dependencies when installing
 	# packages with apt.
-	file {
+	kfile {
 		"/etc/apt/apt.conf.d/no-recommends":
-			content => "APT::Install-Recommends \"false\";\n",
-			owner => "root",
-			group => "root",
-			mode => 644;
+			content => "APT::Install-Recommends \"false\";\n";
 		"/etc/apt/apt.conf.d/no-suggests":
-			content => "APT::Install-Suggests \"false\";\n",
-			owner => "root",
-			group => "root",
-			mode => 644;
+			content => "APT::Install-Suggests \"false\";\n";
 	}
 
-	apt::source {
+	gen_apt::source {
 	        "${lsbdistcodename}-updates":
 		            comment => "Repository for update packages in $lsbdistcodename, such as SpamAssassin and Clamav",
 		            sourcetype => "deb",
@@ -62,15 +56,14 @@ class kbp-debian::squeeze {
 		            components => "main";
 	}
 
-	package { "bsd-mailx":
-		ensure => installed
+	kpackage { "bsd-mailx":
+		ensure => installed;
 	}
 }
 
 class kbp-debian inherits kbp-base {
-        $aptproxy = "http://apt-proxy:9999"
+        $aptproxy = "http://apt-proxy.sys.kumina.nl:9999"
 
-        include apt
 	include "kbp-debian::$lsbdistcodename"
 	include rng-tools
 
@@ -85,10 +78,13 @@ class kbp-debian inherits kbp-base {
           "file", "debsums", "dlocate", "gnupg", "ucf", "elinks", "reportbug",
           "tree", "netcat", "openssh-client", "tcpdump", "iproute", "acl",
           "psmisc", "udev", "lsof", "bzip2", "strace", "pinfo", "lsb-release",
-          "ethtool", "host", "socat", "make", "nscd", "ca-certificates"]
-        package { $wantedpackages:
-                ensure => installed
+          "ethtool", "host", "socat", "make", "nscd"]
+        kpackage { $wantedpackages:
+                ensure => installed;
         }
+	package { "ca-certificates":
+		ensure => installed;
+	}
 
         # Packages we do not need, thank you very much!
         $unwantedpackages = ["pidentd", "dhcp3-client",
@@ -97,13 +93,13 @@ class kbp-debian inherits kbp-base {
            "mpack", "mtools", "popularity-contest", "procmail", "tcsh",
            "w3m", "wamerican", "ppp", "pppoe", "pppoeconf", "at", "mdetect",
            "tasksel"]
-        package { $unwantedpackages:
-                ensure => absent
+        kpackage { $unwantedpackages:
+                ensure => absent;
         }
 
         # Local timezone
         package { "tzdata":
-                ensure => installed,
+                ensure => latest,
         }
 
         file { "/etc/timezone":
@@ -181,10 +177,8 @@ class kbp-debian inherits kbp-base {
 			mode => 644;
 	}
 
-        # Mail on upgrades with cron-apt
-        package { "cron-apt":
-                ensure => installed,
-        }
+	# Mail on upgrades with cron-apt
+	kpackage { "cron-apt":; }
 
         file { "/etc/cron-apt/config":
                 source => "puppet://puppet/kbp-debian/cron-apt/config",
@@ -194,7 +188,7 @@ class kbp-debian inherits kbp-base {
                 require => Package["cron-apt"],
         }
 
-	apt::source {
+	gen_apt::source {
 		"${lsbdistcodename}-base":
 			comment => "The main repository for the installed Debian release: $lsbdistdescription.",
 			sourcetype => "deb",
@@ -213,38 +207,35 @@ class kbp-debian inherits kbp-base {
 			uri => "$aptproxy/backports",
 			distribution => "${lsbdistcodename}-backports",
 			components => "main contrib non-free",
-			require => Apt::Key["16BA136C"];
+			require => Gen_apt::Key["16BA136C"];
 		"kumina":
 			comment => "Local repository, for packages maintained by Kumina.",
 			sourcetype => "deb",
 			uri => "$aptproxy/kumina/",
 			distribution => "${lsbdistcodename}-kumina",
 			components => "main",
-			require => Apt::Key["498B91E6"];
-        }
-
-	# Kumina repository key
-        apt::key { "498B91E6":
-                ensure => present,
-        }
-
-	# Backports.org repository key
-	apt::key { "16BA136C":
-		ensure => present,
+			require => Gen_apt::Key["498B91E6"];
 	}
 
-	# Package which makes sure the installed Kumina repository key is
-	# up-to-date.
-	package { "kumina-archive-keyring":
-		ensure => latest,
+	# Package which makes sure the installed Kumina repository key is up-to-date.
+	kpackage { "kumina-archive-keyring":
+		ensure => latest;
 	}
 
-        file { "/etc/apt/preferences":
-                content => template("kbp-debian/${lsbdistcodename}/apt/preferences"),
-                owner => "root",
-                group => "root",
-                mode => 644;
-        }
+#        kfile { "/etc/apt/preferences":
+#                content => template("kbp-debian/${lsbdistcodename}/apt/preferences");
+#        }
+
+	gen_apt::preference { "all":
+		package => "*",
+		repo    => "${lsbdistcodename}-kumina";
+	}
+
+	# TODO: move to appropriate modules (ticket 588)
+	if $lsbdistcodename == "lenny" {
+		gen_apt::preference { ["libvirt-bin","virtinst","libvirt-doc","libvirt0","facter","virt-manager","libasound2","libbrlapi0.5","kvm","rake","python-django","varnish","linux-image-2.6-amd64","firmware-bnx2","drbd8-utils","heartbeat"]:; }
+	}
+
 
 	file { "/var/lib/puppet":
 		ensure => directory,

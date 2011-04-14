@@ -5,4 +5,13 @@
 
 class kbp-pacemaker {
 	include pacemaker
+	include kbp_pacemaker::monitoring::icinga
+}
+
+class kbp_pacemaker::monitoring::icinga {
+	kbp_icinga::service { "pacemaker_${fqdn}":
+		service_description => "Pacemaker",
+		checkcommand        => "check_pacemaker",
+		nrpe                => true;
+	}
 }

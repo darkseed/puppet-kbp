@@ -1,7 +1,6 @@
 class kbp-puppetmaster {
 	include munin::client
-	include kbp_vim
-	include kbp_vim::addon-manager
+	include kbp_puppetmaster::monitoring::icinga
 
         package {
 		"puppetmaster":
@@ -35,12 +34,8 @@ class kbp-puppetmaster {
 	}
 
 	# Install vim-puppet syntax higlighting rules and turn them on
-	package { "vim-puppet":
-		ensure => "latest",
-	}
-	exec { "Install syntax highlighting for .pp files":
-		command => "/usr/bin/vim-addons -w puppet install;",
-		creates => "/var/lib/vim/addons/syntax/puppet.vim",
+	kbp_vim::vim_addon { "puppet":
+		package => "vim-puppet";
 	}
 
 	# Enforce Puppet modules directory permissions.
@@ -67,6 +62,9 @@ class kbp-puppetmaster {
 		"Directory permissions in /srv/puppet for group root":
 			dir => "/srv/puppet",
 			acl => "default:group:root:rwx";
+		"Directory permissions in /srv/puppet for user puppet":
+			dir => "/srv/puppet",
+			acl => "default:user:puppet:r-x";
 	}
 
         if tagged(nginx) {
@@ -103,4 +101,13 @@ class kbp-puppetmaster {
         munin::client::plugin { "puppetmasterd_process_memory":
                 script_path => "/usr/local/share/munin/plugins",
         }
+}
+
+class kbp_puppetmaster::monitoring::icinga {
+	kbp_icinga::service { "check_sslcert_${fqdn}":
+		service_description => "SSL certificate validity",
+		checkcommand        => "check_sslcert",
+		argument1           => '"/var/lib/puppet/ssl/ca/signed /var/lib/puppet/ssl/certs"',
+		nrpe                => true;
+	}
 }

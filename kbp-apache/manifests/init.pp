@@ -1,18 +1,12 @@
 class kbp-apache inherits apache {
 	include kbp-munin::client::apache
-	file {
+	kfile {
 		"/etc/apache2/mods-available/deflate.conf":
-			source => "puppet://puppet/kbp-apache/mods-available/deflate.conf",
-			owner => "root",
-			group => "root",
-			mode => 644,
+			source => "kbp-apache/mods-available/deflate.conf",
 			require => Package["apache2"],
 			notify => Exec["reload-apache2"];
 		"/etc/apache2/conf.d/security":
-			source => "puppet://puppet/kbp-apache/conf.d/security",
-			owner => "root",
-			group => "root",
-			mode => 644,
+			source => "kbp-apache/conf.d/security",
 			require => Package["apache2"],
 			notify => Exec["reload-apache2"];
 	}
@@ -20,4 +14,20 @@ class kbp-apache inherits apache {
 	apache::module { "deflate":
 		ensure => present,
 	}
+
+	@package { "php5-gd":
+		ensure  => latest,
+		require => Package["apache2"],
+		notify  => Exec["reload-apache2"];
+	}
+}
+
+class kbp-apache::passenger {
+	include kbp-apache
+
+	kpackage { "libapache2-mod-passenger":
+		ensure => latest;
+	}
+
+	apache::module { "ssl":; }
 }

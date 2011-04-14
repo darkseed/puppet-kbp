@@ -1,0 +1,21 @@
+define host {<% if use != "false" %>
+	use                           <%= use %><% end %>
+	<% if register == "0" %>name     <% else %>host_name<% end%>                     <%= name %>
+	hostgroups                    <%= hostgroups %>
+	address                       <%= address %><% if parents != "false" %>
+	parents                       <%= parents %><% end %><% if initialstate != "false" %>
+	initial_state                 <%= initialstate %><% end %><% if notifications_enabled != "false" %>
+	notifications_enabled         <%= notifications_enabled %><% end %><% if event_handler_enabled != "false" %>
+	event_handler_enabled         <%= event_handler_enabled %><% end %><% if flap_detection_enabled != "false" %>
+	flap_detection_enabled        <%= flap_detection_enabled %><% end %><% if process_perf_data != "false" %>
+	process_perf_data             <%= process_perf_data %><% end %><% if retain_status_information != "false" %>
+	retain_status_information     <%= retain_status_information %><% end %><% if retain_nonstatus_information != "false" %>
+	retain_nonstatus_information  <%= retain_nonstatus_information %><% end %><% if check_command != "false" %>
+	check_command                 <%= check_command %><% end %><% if check_interval != "false" %>
+	check_interval                <%= check_interval %><% end %><% if notification_period != "false" %>
+	notification_period           <%= notification_period %><% end %><% if notification_interval != "false" %>
+	notification_interval         <%= notification_interval %><% end %><% if contact_groups != "false" %>
+	contact_groups                <%= contact_groups %><% end %><% if max_check_attempts != "false" %>
+	max_check_attempts            <%= max_check_attempts %><% end %><% if register != "false" %>
+	register                      <%= register %><% end %>
+}

@@ -1,9 +1,11 @@
-# memory.rb
-# Additional Facts for memory/swap usage
+# meminbytes.rb
+# Additional Facts for memory/swap usage in bytes
 #
+# Original file:
 # Copyright (C) 2006 Mooter Media Ltd
 # Author: Matthew Palmer <matt@solutionsfirst.com.au>
 #
+# Modifications by: Rutger Spiertz, Kumina BV
 #
 require 'thread'
 

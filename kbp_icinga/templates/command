@@ -1,0 +1,5 @@
+define command {
+	command_name <%= name %><% if nrpe %>
+	command_line /usr/lib/nagios/plugins/check_nrpe<% if time_out %> -t <%= time_out %><% end %> <%= host_argument %> -c <% if commandname %><%= commandname %><% else %><%= name %><% end %><% if argument1 %> <%= argument1 %><% end %><% if argument2 %> <%= argument2 %><% end %><% if argument3 %> <%= argument3 %><% end %><% else %>
+	command_line /usr/lib/nagios/plugins/<% if commandname %><%= commandname %><% else %><%= name %><% end %><% if time_out %> -t <%= time_out %><% end %> <%= host_argument %><% if argument1 %> <%= argument1 %><% end %><% if argument2 %> <%= argument2 %><% end %><% if argument3 %> <%= argument3 %><% end %><% end %>
+}
